@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:padding="5dip"
+	android:background="#FF000000">
+	
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:textAppearance="@android:style/TextAppearance.Medium"
+		android:text="@string/security_unlock_instructions"
+		android:textColor="#FFFFFFFF" />
+	<EditText
+		android:id="@+id/passwordEditText"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:imeOptions="actionGo"
+		android:hint="@string/security_enter_password_hint" />
+	<Button
+		android:id="@+id/unlockButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right"
+		android:text="@string/security_unlock_button" />
+		
+	<View
+		android:layout_width="wrap_content"
+		android:layout_height="10dip"
+		android:layout_weight="1.0" />
+		
+	<Button
+		android:id="@+id/forgotPasswordButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="right"
+		android:text="@string/security_forgot_password_button" />
+</LinearLayout>

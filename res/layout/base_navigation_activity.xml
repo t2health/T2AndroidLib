@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:id="@+id/navigationTitleWrapper"
+		android:layout_width="fill_parent"
+		android:layout_height="48dip"
+		android:gravity="center_vertical"
+		android:background="#FF000000">
+		
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:gravity="center_vertical"
+			android:background="@drawable/t2_base_navigation_title_bg_overlay">
+			<Button
+				android:id="@+id/navigationLeftButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="5dip" />
+	
+			<TextView
+				android:id="@+id/navigationTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1.0"
+				style="@android:style/TextAppearance.Medium"
+				android:text=""
+				android:maxLines="2"
+				android:ellipsize="end" />
+	
+			<Button
+				android:id="@+id/navigationRightButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="5dip" />
+		</LinearLayout>
+	</LinearLayout>
+
+	<FrameLayout
+		android:id="@+id/navigationContent"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0">
+	</FrameLayout>
+
+</LinearLayout>

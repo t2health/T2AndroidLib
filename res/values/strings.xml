@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="back">Back</string>
+	<string name="cancel">Cancel</string>
+	<string name="save">Save</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+
+	<!-- Security -->
+	<string name="security_unlock_title">Unlock</string>
+	<string name="security_forgot_password_title">Forgot Password</string>
+	<string name="security_configure_title">Configure Security</string>
+	<string name="security_unlock_instructions">The application has been locked. Please provide your password to unlock.</string>
+	<string name="security_unlock_button">Unlock</string>
+	<string name="security_forgot_password_button">Forgot Password</string>
+	<string name="security_enter_password_hint">Enter password</string>
+	<string name="security_enabled">Security Enabled</string>
+	<string name="security_password_already_set_hint">(password set, touch to change)</string>
+	<string name="security_forgot_password_settings">Forgot Password Settings</string>
+	<string name="security_enter_question1_hint">Enter challenge question 1</string>
+	<string name="security_enter_answer1_hint">Enter answer 1</string>
+	<string name="security_answer_already_set_hint">(answer set, touch to change)</string>
+	<string name="security_enter_question2_hint">Enter challenge question 2</string>
+	<string name="security_enter_answer2_hint">Enter answer 2</string>
+	<string name="security_forgot_password_instructions">To unlock the App without a password, provide the answer to both security questions below.</string>
+	<string name="security_bad_input_message">Fill out all the fields.</string>
+	
 	<!-- EULA -->
 	<string name="eula_title">License</string>
 	<string name="eula_accept">Accept</string>
