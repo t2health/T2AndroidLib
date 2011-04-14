@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import org.t2health.lib.activity.BaseNavigationActivity;
+import org.xml.sax.Parser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -17,6 +19,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -28,23 +31,53 @@ import android.widget.SimpleAdapter;
 
 /**
  * Provides a list-based hierarchical structure of content based on an XML file.
+ * located in res/xml.
  * <items title="Title of activity" style="separated|normal">
- * 		<item id="item1" title="section1" />
- * 			<item title="Section 1 item 1" parentId="item1"><![CDATA[
+ * 		<item id="item1" title="section1">
+ * 			<item title="Section 1 item 1"><![CDATA[
  * 				HTML Content goes here
  * 			]]></item>
- * 			<item title="Section 1 item 2" parentId="item1"><![CDATA[
- * 				HTML Content goes here
- * 			]]></item>
+ * 			<item title="Section 1 item 2">
+ *				<item title="another level"><![CDATA[
+ * 					HTML Content goes here
+ * 				]]></item>
+ * 				<item title="another level again"><![CDATA[
+ *					HTML Content goes here
+ * 				]]></item>
+ *			</item>
+ * 		</item>
  * </items>
+ * 
+ * Any item can have multiple children. Each item can have the following tags.
+ * <ul>
+ * 	<li>title - The title of the item as it will be displayed in the list. (necessary)</li>
+ * 	<li>id - a unique id used for quick linking to the specific item. (optional)</li>
+ * 	<li>uri - load this uri when the item is clicked (optional)</li>
+ * </ul>
  * @author robbiev
  *
  */
 public class XMLItemsBrowserActivity extends BaseNavigationActivity implements OnItemClickListener {
+	/**
+	 * The resource id of the XML file to parse (required).
+	 */
 	public static final String EXTRA_XML_RESOURCE = "xmlResId";
-	public static final String EXTRA_BASE_ITEM_ID = "sectionId";
-	public static final String EXTRA_HEADER_RES_ID = "headerResId";
-	public static final String EXTRA_ITEM_RES_ID = "itemResId";
+	
+	/**
+	 * Collect all the items start from the element with this id.
+	 */
+	public static final String EXTRA_START_ID = "startId";
+	
+	/**
+	 * The layout resource id to use as the separator header in the list.
+	 * This only visible in the separated style.
+	 */
+	public static final String EXTRA_LIST_SEPARATOR_RES_ID = "separatorResId";
+	
+	/**
+	 * The layout resource id to use as an item in the list.
+	 */
+	public static final String EXTRA_LIST_ITEM_RES_ID = "listItemResId";
 
 	private static final String STYLE_NORMAL = "normal";
 	private static final String STYLE_SEPARATED = "separated";
@@ -54,8 +87,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	private static final String XML_ITEM_TAG = "item";
 	private static final String XML_ID_ATTRIBUTE = "id";
 	private static final String XML_TITLE_ATTRIBUTE = "title";
-	private static final String XML_PARENT_ID_ATTRIBUTE = "parentId";
 	private static final String XML_STYLE_ATTRIBUTE = "style";
+	private static final String XML_URI_ATTRIBUTE = "uri";
 
 	protected static final String LIST_ITEM_TITLE = "title";
 	protected static final String LIST_ITEM_ID = "id";
@@ -78,8 +111,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 		Intent intent = this.getIntent();
 
-		this.seperatorResId = intent.getIntExtra(EXTRA_HEADER_RES_ID, this.getHeaderLayoutResId());
-		this.itemResId = intent.getIntExtra(EXTRA_ITEM_RES_ID, this.getItemLayoutResId());
+		this.seperatorResId = intent.getIntExtra(EXTRA_LIST_SEPARATOR_RES_ID, this.getHeaderLayoutResId());
+		this.itemResId = intent.getIntExtra(EXTRA_LIST_ITEM_RES_ID, this.getItemLayoutResId());
 
 		this.setSeparatorResource(
 				this.seperatorResId,
@@ -111,7 +144,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			}
 		}
 
-		String baseXMLItemId = intent.getStringExtra(EXTRA_BASE_ITEM_ID);
+		String baseXMLItemId = intent.getStringExtra(EXTRA_START_ID);
 		if(baseXMLItemId == null || baseXMLItemId.length() == 0) {
 			baseXMLItemId = BASE_ITEM_ID;
 		}
@@ -122,8 +155,6 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		if(baseItem == null) {
 			return;
 		}
-
-		this.setTitle(baseItem.title);
 
 		if(baseItem.hasItems(this.itemsMap)) {
 			ListView listView = new ListView(this);
@@ -143,9 +174,11 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 						LayoutParams.FILL_PARENT
 					)
 			);
+			this.setTitle(baseItem.title);
 		} else {
 			this.onItemClick(baseItem);
 			this.finish();
+			return;
 		}
 	}
 
@@ -244,47 +277,70 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	/**
 	 * Iterates through the xml file and builds the data structure.
 	 * @param xmlResourceId
-	 * @param baseId
+	 * @param startElementId
 	 * @return
 	 */
-	private LinkedHashMap<String,Item> loadItemsFromXML(int xmlResourceId, String baseId) {
+	private LinkedHashMap<String,Item> loadItemsFromXML(int xmlResourceId, String startElementId) {
 		LinkedHashMap<String,Item> items = new LinkedHashMap<String,Item>();
-		int tagNum = -1;
-
+		Stack<Item> itemStack = new Stack<Item>();
+		
 		// build the list of sections
 		try {
+			int tagNum = -1;
+			String currentTag = null;
 			XmlResourceParser parser = this.getResources().getXml(xmlResourceId);
 			int eventType = parser.getEventType();
+			int startElementDepth = -1;
+			int currentDepth = -1;
+			boolean isItemsTag = false;
+			boolean isItemTag = false;
+			boolean inStartElement = (startElementId == null || startElementId.length() == 0)?true:false;
+			Item parentItem = null;
+			
+			// Iterate through each tag in the XML.
 			while(eventType != XmlPullParser.END_DOCUMENT) {
-				String tag = parser.getName();
+				parentItem = null;
+				if(itemStack.size() > 0) {
+					parentItem = itemStack.peek();
+				}
+				currentTag = parser.getName();
+				currentDepth = parser.getDepth();
+				
+				isItemsTag = false;
+				isItemTag = false;
+				if(eventType == XmlPullParser.START_TAG || eventType == XmlPullParser.END_TAG) {
+					isItemsTag = currentTag.equals(XML_ITEMS_TAG);
+					isItemTag = currentTag.equals(XML_ITEM_TAG);
+				}
 				++tagNum;
 
+				// If a start tag was found.
 				if(eventType == XmlPullParser.START_TAG) {
-					boolean isBaseItem = tag.equals(XML_ITEMS_TAG);
-					if(tag.equals(XML_ITEM_TAG) || isBaseItem) {
+					
+					// if the tag is an "item" tag or 
+					if(isItemTag || isItemsTag) {
 						Item currentItem = new Item(
 							parser.getAttributeValue(null, XML_ID_ATTRIBUTE),
 							parser.getAttributeValue(null, XML_TITLE_ATTRIBUTE),
-							parser.getAttributeValue(null, XML_PARENT_ID_ATTRIBUTE)
+							(parentItem == null)?BASE_ITEM_ID:parentItem.id
 						);
-
-						String destUriStr = parser.getAttributeValue(null, "destUri");
+						
+						// Set item attributes
+						String destUriStr = parser.getAttributeValue(null, XML_URI_ATTRIBUTE);
 						if(destUriStr != null) {
 							currentItem.destUri = Uri.parse(destUriStr);
 						}
-
-						if(isBaseItem) {
+	
+						if(isItemsTag) {
 							currentItem.id = BASE_ITEM_ID;
 							currentItem.parentId = null;
 						} else {
-							// create an id for the item.
+							// generate an id for the item if it doens't exist.
 							if(currentItem.id == null || currentItem.id.length() == 0) {
 								currentItem.id = "genid-"+tagNum;
 							}
 						}
-
-						//Log.v(TAG, "item:"+currentItem.id+","+currentItem.parentId);
-
+						
 						// set the style for the item.
 						String style = parser.getAttributeValue(null, XML_STYLE_ATTRIBUTE);
 						if(style == null || style.length() == 0) {
@@ -294,42 +350,58 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 							style = STYLE_NORMAL;
 						}
 						currentItem.style = style;
-
 						currentItem.attributes = getAttributes(parser);
 
-						items.put(currentItem.id, currentItem);
-
-						eventType = parser.next();
-						if(eventType == XmlPullParser.TEXT) {
-							if(currentItem != null) {
-								currentItem.content = parser.getText();
-							}
+						/** 
+						 * Check if this item is the startElementId we'd 
+						 * like to parse from.
+						 */
+						if(currentItem.id.equals(startElementId)) {
+							startElementDepth = parser.getDepth();
+							inStartElement = true;
 						}
-						continue;
+						
+						/** 
+						 * Add this item to the list if we have found the start
+						 * element and we are within 4 levels of the start element.
+						 */
+						if(inStartElement && startElementDepth > currentDepth - 4) {
+							items.put(currentItem.id, currentItem);
+						}
+						
+						/**
+						 *  add this item to the stack, it may be the parent of
+						 *  other items.
+						 */
+						if(!parser.isEmptyElementTag()) {
+							itemStack.push(currentItem);
+						}
+						
+					} else if(eventType == XmlPullParser.TEXT) {
+						if(parentItem != null) {
+							parentItem.content = parser.getText();
+						}
+					}
+					
+				} else if(eventType == XmlPullParser.END_TAG) {
+					if(currentTag.equals(XML_ITEM_TAG) || isItemsTag) {
+						Item poppedItem = itemStack.pop();
+						
+						// if the popped item is the baseId, then stop parsing.
+						if(poppedItem.id.equals(startElementId)) {
+							break;
+						}
 					}
 				}
 
 				eventType = parser.next();
 			}
+			
+			parser.close();
 		} catch (XmlPullParserException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-
-		// clean up the item tree.
-		for(Item item: items.values()) {
-			if(item.id.equals(BASE_ITEM_ID)) {
-				continue;
-			}
-
-			if(item.parentId == null || item.parentId.length() == 0) {
-				item.parentId = BASE_ITEM_ID;
-			}
-
-			if(items.get(item.parentId) == null) {
-				item.parentId = BASE_ITEM_ID;
-			}
 		}
 
 		return items;
@@ -375,7 +447,6 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 			// add the header item.
 			if(item.hasItems(this.itemsMap)) {
-				//Log.v(TAG, "Add header "+ item.title);
 				HashMap<String,Object> hashItem = item.buildHashItem();
 				hashItem.put(SimpleSeperatorAdapter.IS_SEPERATOR_ITEM_KEY, true);
 				hashItem.put(SimpleSeperatorAdapter.IS_ENABLED_ITEM_KEY, false);
@@ -416,6 +487,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	}
 
 	public void onItemClick(Item item) {
+		Log.v(TAG, "item clicked:"+item.id);
 		if(item.destUri != null) {
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
 			intent.setData(item.destUri);
@@ -424,11 +496,12 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		} else if(item.hasItems(this.itemsMap)) {
 			Intent intent = new Intent(this, this.getClass());
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_XML_RESOURCE, this.xmlResource);
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_BASE_ITEM_ID, item.id);
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_HEADER_RES_ID, this.seperatorResId);
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_ITEM_RES_ID, this.itemResId);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_START_ID, item.id);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_SEPARATOR_RES_ID, this.seperatorResId);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_ITEM_RES_ID, this.itemResId);
 			this.startActivity(intent);
-		} else {
+			
+		} else if(item.hasContent()){
 			Intent intent = new Intent(this, WebViewActivity.class);
 			intent.putExtra(WebViewActivity.EXTRA_CONTENT, item.content);
 			intent.putExtra(WebViewActivity.EXTRA_TITLE, item.title);
@@ -455,6 +528,10 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			this.id = id;
 			this.title = title;
 			this.attributes  = atts;
+		}
+		
+		public boolean hasContent() {
+			return content != null && content.length() > 0;
 		}
 
 		public boolean hasItems(LinkedHashMap<String,Item> items) {
