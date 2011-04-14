@@ -5,7 +5,6 @@ import org.t2health.lib.R;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -17,18 +16,58 @@ import android.widget.TextView;
  * A base class that is used for basic navigation through the app. It provides
  * a left (typically back) button, a right button and a title with a formatted
  * background.
+ * The left button of this activity is by default configured to act as a "back"
+ * button. Pressing this will set the result to RESULT_BACK and finish the 
+ * activity.
  * @author robbiev
  *
  */
 public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 	private static final String exceptionText = "setContentView should be ran before any modication methods.";
+	
+	/**
+	 * The text (presented as String or Resource ID) to set in the title bar.
+	 */
 	public static final String EXTRA_TITLE_TEXT = "title";
-	public static final String EXTRA_RIGHT_BUTTON_TEXT = "rightButtonText";
-	public static final String EXTRA_RIGHT_BUTTON_VISIBILITY = "rightButtonVisibility";
-	public static final String EXTRA_LEFT_BUTTON_TEXT = "leftButtonText";
-	public static final String EXTRA_LEFT_BUTTON_VISIBILITY = "leftButtonVisibility";
+	
+	/**
+	 * The visibility of the title text. This is excepted to be an int and
+	 * standard view visibility attributes are accepted. 
+	 * (eg View.VISIBLE, View.INVISIBLE, View.GONE, etc)
+	 */
 	public static final String EXTRA_TITLE_VISIBILITY = "titleVisibility";
 	
+	/**
+	 * The text (presented as String or Resource ID) to set as the right 
+	 * button's text.
+	 */
+	public static final String EXTRA_RIGHT_BUTTON_TEXT = "rightButtonText";
+	
+	/**
+	 * The visibility of the right button. This is excepted to be an int and
+	 * standard view visibility attributes are accepted. 
+	 * (eg View.VISIBLE, View.INVISIBLE, View.GONE, etc)
+	 */
+	public static final String EXTRA_RIGHT_BUTTON_VISIBILITY = "rightButtonVisibility";
+	
+	/**
+	 * The text (presented as String or Resource ID) to set as the left 
+	 * button's text.
+	 */
+	public static final String EXTRA_LEFT_BUTTON_TEXT = "leftButtonText";
+	
+	/**
+	 * The visibility of the left button. This is excepted to be an int and
+	 * standard view visibility attributes are accepted. 
+	 * (eg View.VISIBLE, View.INVISIBLE, View.GONE, etc)
+	 * The default is "Back"
+	 */
+	public static final String EXTRA_LEFT_BUTTON_VISIBILITY = "leftButtonVisibility";
+	
+	/**
+	 * The result code that will be send when the left button is pressed and
+	 * its method is not overriden.
+	 */
 	public static final int RESULT_BACK = 34980457;
 
 	private NavigationItemEventListener navItemEventListener;
@@ -101,19 +140,6 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 		this.findViewById(R.id.navigationRightButton).setOnClickListener(navItemEventListener);
 	}
 	
-	private String getIntentText(Intent intent, String extraKey) {
-		int resId = intent.getIntExtra(extraKey, 0);
-		String titleText = intent.getStringExtra(extraKey);
-		
-		if(resId != 0) {
-			return getString(resId);
-		} else if(titleText != null) {
-			return titleText;
-		}
-		
-		return null;
-	}
-
 	@Override
 	public void setContentView(int layoutResID) {
 		View v = this.getLayoutInflater().inflate(R.layout.base_navigation_activity, null);

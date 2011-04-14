@@ -1,7 +1,5 @@
 package org.t2health.lib.security;
 
-import java.util.Random;
-
 import org.t2health.lib.IntentFactory;
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
@@ -14,11 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class UnlockActivity extends BaseNavigationActivity implements OnKeyListener, OnClickListener {
 	private static final int FORGOT_PIN_ACTIVITY = 235;

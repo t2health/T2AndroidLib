@@ -3,11 +3,7 @@ package org.t2health.lib.security;
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.activity.BaseNavigationActivity;
-import org.t2health.lib.activity.BaseSecurityActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;

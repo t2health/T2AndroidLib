@@ -1,7 +1,6 @@
 package org.t2health.lib.activity;
 
 
-import org.t2health.lib.IntentFactory;
 import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
@@ -63,6 +62,27 @@ public abstract class BaseActivity extends OrmLiteBaseActivity<DatabaseOpenHelpe
 	 */
 	protected String getAnalyticsActivityEvent() {
 		return this.getClass().getSimpleName();
+	}
+	
+	/**
+	 * Retrieve a string from the intent. This will handle both resource id
+	 * and string values.
+	 * @param intent
+	 * @param extraKey
+	 * @return
+	 */
+	protected String getIntentText(Intent intent, String extraKey) {
+		String text = intent.getStringExtra(extraKey);
+		
+		if(text != null && text.matches("[0-9]+")) {
+			int resId = Integer.parseInt(text);
+			String resourceText = getString(resId);
+			if(resourceText != null) {
+				text = resourceText;
+			}
+		}
+		
+		return text;
 	}
 	
 	@Override

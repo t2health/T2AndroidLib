@@ -5,11 +5,12 @@ import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.nullwire.trace.ExceptionHandler;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.nullwire.trace.ExceptionHandler;
 
 public abstract class BasePreferenceActivity extends PreferenceActivity {
 	@Override
@@ -53,6 +54,27 @@ public abstract class BasePreferenceActivity extends PreferenceActivity {
 	 */
 	protected String getAnalyticsActivityEvent() {
 		return this.getClass().getSimpleName();
+	}
+	
+	/**
+	 * Retrieve a string from the intent. This will handle both resource id
+	 * and string values.
+	 * @param intent
+	 * @param extraKey
+	 * @return
+	 */
+	protected String getIntentText(Intent intent, String extraKey) {
+		String text = intent.getStringExtra(extraKey);
+		
+		if(text != null && text.matches("[0-9]+")) {
+			int resId = Integer.parseInt(text);
+			String resourceText = getString(resId);
+			if(resourceText != null) {
+				text = resourceText;
+			}
+		}
+		
+		return text;
 	}
 	
 	@Override

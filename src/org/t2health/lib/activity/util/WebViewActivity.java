@@ -5,7 +5,6 @@ import org.t2health.lib.R;
 import org.t2health.lib.activity.BaseNavigationActivity;
 import org.t2health.lib.util.WebViewUtil;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -17,29 +16,19 @@ import android.webkit.WebView;
  *
  */
 public class WebViewActivity extends BaseNavigationActivity {
-//	private static final String TAG = T2WebViewActivity.class.getSimpleName();
-
-	public static final String EXTRA_TITLE = "title";
+	/**
+	 * The content text (presented as String or Resource ID).
+	 */
 	public static final String EXTRA_CONTENT = "content";
-
-	public static final String EXTRA_TITLE_ID = "titleId";
-	public static final String EXTRA_CONTENT_ID = "contentId";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Intent intent = this.getIntent();
-
-		int contentId = intent.getIntExtra(EXTRA_CONTENT_ID, -1);
-		String contentString = intent.getStringExtra(EXTRA_CONTENT);
-
-		if(contentString == null && contentId == -1) {
+		String contentString = this.getIntentText(getIntent(), EXTRA_CONTENT);
+		if(contentString == null || contentString.length() == 0) {
 			this.finish();
-		}
-
-		if(contentId != -1) {
-			contentString = getString(contentId);
+			return;
 		}
 
 		this.setContentView(R.layout.webview_layout);

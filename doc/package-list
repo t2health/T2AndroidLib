@@ -1,3 +1,4 @@
+android.preference
 au.com.bytecode.opencsv
 com.j256.ormlite.android
 com.j256.ormlite.android.apptools
@@ -12,6 +13,7 @@ com.j256.ormlite.stmt.query
 com.j256.ormlite.support
 com.j256.ormlite.table
 com.nullwire.trace
+com.t2.lib
 org.achartengine
 org.achartengine.chart
 org.achartengine.model
@@ -20,7 +22,10 @@ org.achartengine.tools
 org.achartengine.util
 org.t2health.lib
 org.t2health.lib.activity
+org.t2health.lib.activity.util
 org.t2health.lib.analytics
 org.t2health.lib.db
+org.t2health.lib.preference
+org.t2health.lib.security
 org.t2health.lib.util
 org.t2health.lib.widget

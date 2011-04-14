@@ -1,14 +1,12 @@
 package org.t2health.lib.activity;
 
 
-import org.t2health.lib.IntentFactory;
 import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.DatabaseOpenHelper;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;

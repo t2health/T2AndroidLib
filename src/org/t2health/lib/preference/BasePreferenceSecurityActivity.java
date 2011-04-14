@@ -4,7 +4,6 @@ import org.t2health.lib.IntentFactory;
 import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.security.AppSecurityManager;
-import org.t2health.lib.security.UnlockActivity;
 
 import android.app.Activity;
 import android.content.Intent;

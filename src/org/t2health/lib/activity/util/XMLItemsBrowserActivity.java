@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.t2health.lib.activity.BaseNavigationActivity;
-import org.xml.sax.Parser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -19,7 +18,6 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -54,6 +52,10 @@ import android.widget.SimpleAdapter;
  * 	<li>id - a unique id used for quick linking to the specific item. (optional)</li>
  * 	<li>uri - load this uri when the item is clicked (optional)</li>
  * </ul>
+ * 
+ * Note: In order for the HTML content of an item to load, 
+ * org.t2health.lib.activity.util.WebViewActivity
+ * needs be be listed in your manifest file as an activity.
  * @author robbiev
  *
  */
@@ -376,11 +378,11 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 						if(!parser.isEmptyElementTag()) {
 							itemStack.push(currentItem);
 						}
+					}
 						
-					} else if(eventType == XmlPullParser.TEXT) {
-						if(parentItem != null) {
-							parentItem.content = parser.getText();
-						}
+				} else if(eventType == XmlPullParser.TEXT) {
+					if(parentItem != null) {
+						parentItem.content = parser.getText();
 					}
 					
 				} else if(eventType == XmlPullParser.END_TAG) {
@@ -487,7 +489,6 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	}
 
 	public void onItemClick(Item item) {
-		Log.v(TAG, "item clicked:"+item.id);
 		if(item.destUri != null) {
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
 			intent.setData(item.destUri);
@@ -504,7 +505,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		} else if(item.hasContent()){
 			Intent intent = new Intent(this, WebViewActivity.class);
 			intent.putExtra(WebViewActivity.EXTRA_CONTENT, item.content);
-			intent.putExtra(WebViewActivity.EXTRA_TITLE, item.title);
+			intent.putExtra(WebViewActivity.EXTRA_TITLE_TEXT, item.title);
 			this.startActivity(intent);
 		}
 	}
