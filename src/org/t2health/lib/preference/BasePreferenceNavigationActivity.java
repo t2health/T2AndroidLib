@@ -1,26 +1,20 @@
-package org.t2health.lib.activity;
+package org.t2health.lib.preference;
 
 import org.t2health.lib.R;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-/***
- * A base class that is used for basic navigation through the app. It provides
- * a left (typically back) button, a right button and a title with a formatted
- * background.
- * @author robbiev
- *
- */
-public abstract class BaseNavigationActivity extends BaseSecurityActivity {
+public abstract class BasePreferenceNavigationActivity extends
+		BasePreferenceSecurityActivity {
 	private static final String exceptionText = "setContentView should be ran before any modication methods.";
 	public static final String EXTRA_TITLE_TEXT = "title";
 	public static final String EXTRA_RIGHT_BUTTON_TEXT = "rightButtonText";

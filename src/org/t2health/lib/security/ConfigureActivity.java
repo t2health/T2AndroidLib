@@ -1,6 +1,5 @@
-package org.t2health.lib.activity.security;
+package org.t2health.lib.security;
 
-import org.t2health.lib.AppSecurityManager;
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.activity.BaseNavigationActivity;
@@ -35,8 +34,8 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setTitle(R.string.security_configure_title);
 		this.setContentView(R.layout.security_configure_activity);
+		this.setTitle(R.string.security_configure_title);
 		
 		// get the form elements and assign their events.
 		inputsContainer = (ViewGroup)this.findViewById(R.id.inputsContainer);

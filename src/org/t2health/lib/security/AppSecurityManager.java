@@ -1,4 +1,4 @@
-package org.t2health.lib;
+package org.t2health.lib.security;
 
 import android.app.Activity;
 import android.content.Intent;

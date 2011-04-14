@@ -1,4 +1,4 @@
-package org.t2health.lib.activity;
+package org.t2health.lib.preference;
 
 import org.t2health.lib.IntentFactory;
 import org.t2health.lib.ManifestMetaData;
@@ -7,12 +7,10 @@ import org.t2health.lib.security.AppSecurityManager;
 import org.t2health.lib.security.UnlockActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class BaseSecurityActivity extends BaseActivity {
+public abstract class BasePreferenceSecurityActivity extends BasePreferenceActivity {
 	private boolean isEnabled = false;
 	
 	@Override

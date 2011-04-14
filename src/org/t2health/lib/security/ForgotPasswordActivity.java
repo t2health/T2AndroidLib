@@ -1,4 +1,4 @@
-package org.t2health.lib.activity.security;
+package org.t2health.lib.security;
 
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
@@ -23,8 +23,8 @@ public class ForgotPasswordActivity extends BaseNavigationActivity implements On
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setTitle(R.string.security_forgot_password_title);
 		this.setContentView(R.layout.security_forgot_password_activity);
+		this.setTitle(R.string.security_forgot_password_title);
 		
 		((TextView)this.findViewById(R.id.question1)).setText(
 				SharedPref.Security.getQuestion1(this)

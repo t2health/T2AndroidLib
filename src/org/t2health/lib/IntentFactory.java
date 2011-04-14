@@ -68,6 +68,40 @@ public class IntentFactory {
 		return i;
 	}
 	
+	/**
+	 * A collection of security related intents.
+	 * @author robbiev
+	 *
+	 */
+	public static class Security {
+		/**
+		 * Get the intent responsible for configuring security.
+		 * @param c
+		 * @return
+		 */
+		public static Intent getConfigureIntent(Context c) {
+			return new Intent(c, org.t2health.lib.security.ConfigureActivity.class);
+		}
+		
+		/**
+		 * Get the intent that handles the unlock screen.
+		 * @param c
+		 * @return
+		 */
+		public static Intent getUnlockIntent(Context c) {
+			return new Intent(c, org.t2health.lib.security.UnlockActivity.class);
+		}
+		
+		/**
+		 * Get the intent that handles the forgot password screen.
+		 * @param c
+		 * @return
+		 */
+		public static Intent getForgotPasswordIntent(Context c) {
+			return new Intent(c, org.t2health.lib.security.ForgotPasswordActivity.class);
+		}
+	}
+	
 	private static HashMap<String,Boolean> isIntentActionAvailableCache = new HashMap<String,Boolean>();
 	/**
 	 * Indicates whether the specified action can be used as an intent. This

@@ -1,8 +1,8 @@
-package org.t2health.lib.activity.security;
+package org.t2health.lib.security;
 
 import java.util.Random;
 
-import org.t2health.lib.AppSecurityManager;
+import org.t2health.lib.IntentFactory;
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.activity.BaseNavigationActivity;
@@ -28,8 +28,8 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		this.setTitle(R.string.security_unlock_title);
 		this.setContentView(R.layout.security_unlock_activity);
+		this.setTitle(R.string.security_unlock_title);
 		pinEditText = (EditText)this.findViewById(R.id.passwordEditText);
 		pinEditText.setOnKeyListener(this);
 		
@@ -44,6 +44,9 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 			AppSecurityManager.setIsUnlocked(true);
 			this.setResult(RESULT_OK);
 			this.finish();
+			
+			// Start the configure activity so the password can be changed.
+			startActivity(IntentFactory.Security.getConfigureIntent(this));
 		}
 	}
 
@@ -80,12 +83,12 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 	}
 	
 	public void onClick(View v) {
-		Intent i;
 		switch(v.getId()){
 			case R.id.forgotPasswordButton:
-				i = new Intent(this, ForgotPasswordActivity.class);
-				//i.putExtra(ForgotPin.EXTRA_BACK_BUTTON_TEXT, getString(R.string.back_button));
-				this.startActivityForResult(i, FORGOT_PIN_ACTIVITY);
+				this.startActivityForResult(
+						IntentFactory.Security.getForgotPasswordIntent(this), 
+						FORGOT_PIN_ACTIVITY
+				);
 				break;
 		}
 	}
