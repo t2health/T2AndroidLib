@@ -24,8 +24,10 @@ org.t2health.lib
 org.t2health.lib.activity
 org.t2health.lib.activity.util
 org.t2health.lib.analytics
+org.t2health.lib.bluetooth
 org.t2health.lib.db
 org.t2health.lib.preference
 org.t2health.lib.security
 org.t2health.lib.util
 org.t2health.lib.widget
+org.t2health.qa
