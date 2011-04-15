@@ -2,14 +2,9 @@ package org.t2health.qa;
 
 import org.t2health.lib.activity.BaseNavigationActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 /**
  * Base activity for displaying a question and its possible answers.

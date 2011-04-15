@@ -2,11 +2,11 @@ package org.t2health.lib.util;
 
 import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.SharedPref;
-import org.t2health.lib.ManifestMetaData.Database;
-import org.t2health.lib.SharedPref.RemoteStackTrace;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.DatabaseOpenHelper;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
+
+import android.content.Intent;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseService;
@@ -31,7 +31,7 @@ public abstract class BaseService extends OrmLiteBaseService<DatabaseOpenHelper>
 					ManifestSqliteOpenHelperFactory.getInstance()
 			);
 		}
-		
+        
 		// configure and make analytics event call.
 		if(ManifestMetaData.Analytics.isEnabled(this)) {
 			Analytics.init(
@@ -54,5 +54,26 @@ public abstract class BaseService extends OrmLiteBaseService<DatabaseOpenHelper>
 	 */
 	protected String getAnalyticsActivityEvent() {
 		return this.getClass().getSimpleName();
+	}
+	
+	/**
+	 * Retrieve a string value from an intent. This will handle both resource id
+	 * and string values.
+	 * @param intent
+	 * @param extraKey
+	 * @return
+	 */
+	protected String getIntentText(Intent intent, String extraKey) {
+		String text = intent.getStringExtra(extraKey);
+		
+		if(text != null && text.matches("[0-9]+")) {
+			int resId = Integer.parseInt(text);
+			String resourceText = getString(resId);
+			if(resourceText != null) {
+				text = resourceText;
+			}
+		}
+		
+		return text;
 	}
 }

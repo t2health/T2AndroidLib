@@ -1,6 +1,8 @@
 package org.t2health.qa;
 
 
+import org.t2health.lib.R;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,9 +10,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
-import org.t2health.lib.R;
 
 /**
  * A question activity to handle a single answer choice.

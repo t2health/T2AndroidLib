@@ -1,18 +1,10 @@
 package org.t2health.qa;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.t2health.lib.R;
 import org.t2health.lib.activity.util.WebViewActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;

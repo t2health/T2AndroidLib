@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	
+	<FrameLayout
+		android:id="@+id/accessibilityActivityContent"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	</FrameLayout>
+	
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom|right"
+		android:textSize="10sp"
+		android:textColor="#FFFF0000"
+		android:text="Test Message: Accessibility is Enabled!" />
+	
+	<view
+		class="org.t2health.lib.accessibility.TouchLayer"
+		android:id="@+id/accessibilityTouchLayer"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />
+</FrameLayout>

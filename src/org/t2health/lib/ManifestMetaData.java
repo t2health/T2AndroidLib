@@ -28,6 +28,8 @@ public class ManifestMetaData {
 	
 	private static final String SECURITY_ENABLED = "securityEnabled";
 	
+	private static final String ACCESSIBILITY_ENABLED = "accessibilityEnabled";
+	
 	private static final String DEBUG_MODE = "debugMode";
 	
 	private static Bundle applicationMetaData;
@@ -185,15 +187,6 @@ public class ManifestMetaData {
 		public static String getOpenHelper(Context c) {
 			return ManifestMetaData.getString(c, ManifestMetaData.DATABASE_OPEN_HELPER);
 		}
-		
-		/*public static Class<? extends DatabaseOpenHelper> getOpenHelperClass(Context c) {
-			try {
-				return (Class<? extends DatabaseOpenHelper>) Class.forName(getOpenHelper(c));
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}*/
 	}
 	
 	/**
@@ -299,13 +292,35 @@ public class ManifestMetaData {
 		}
 	}
 	
+	/**
+	 * Security related settings.
+	 * @author robbiev
+	 *
+	 */
 	public static class SecurityManager {
-		public static String actionURI(Context c) {
-			return getString(c, SECURITY_ENABLED);
-		}
-		
+		/**
+		 * Returns true if security has been enabled via the manifest file.
+		 * @param c
+		 * @return
+		 */
 		public static boolean isEnabled(Context c) {
 			return getBoolean(c, SECURITY_ENABLED);
+		}
+	}
+	
+	/**
+	 * Accessibility related settings.
+	 * @author robbiev
+	 *
+	 */
+	public static class Accessibility {
+		/**
+		 * Returns true if accessability has been enabled via the manifest file.
+		 * @param c
+		 * @return
+		 */
+		public static boolean isEnabled(Context c) {
+			return getBoolean(c, ACCESSIBILITY_ENABLED);
 		}
 	}
 }

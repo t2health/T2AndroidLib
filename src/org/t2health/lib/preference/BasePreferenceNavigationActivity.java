@@ -133,33 +133,36 @@ public abstract class BasePreferenceNavigationActivity extends
 	
 	@Override
 	public void setContentView(int layoutResID) {
-		View v = this.getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
-		((FrameLayout)v.findViewById(R.id.navigationContent)).addView(
+		View baseLayout = getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
+		((FrameLayout)baseLayout.findViewById(R.id.navigationContent)).addView(
 				this.getLayoutInflater().inflate(layoutResID, null),
 				LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT
 		);
-		super.setContentView(v);
+		super.setContentView(baseLayout);
 		initialize();
 	}
 
 	@Override
 	public void setContentView(View view, LayoutParams params) {
-		View v = this.getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
-		((FrameLayout)v.findViewById(R.id.navigationContent)).addView(view, params);
-		super.setContentView(v);
+		View baseLayout = getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
+		((FrameLayout)baseLayout.findViewById(R.id.navigationContent)).addView(
+				view,
+				params
+		);
+		super.setContentView(baseLayout);
 		initialize();
 	}
 
 	@Override
 	public void setContentView(View view) {
-		View v = this.getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
-		((FrameLayout)v.findViewById(R.id.navigationContent)).addView(
+		View baseLayout = getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
+		((FrameLayout)baseLayout.findViewById(R.id.navigationContent)).addView(
 				view,
 				LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT
 		);
-		super.setContentView(v);
+		super.setContentView(baseLayout);
 		initialize();
 	}
 

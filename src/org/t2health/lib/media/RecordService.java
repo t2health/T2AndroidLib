@@ -1,8 +1,9 @@
-package org.t2health.lib.util;
+package org.t2health.lib.media;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.t2health.lib.util.ElapsedTimer;
 
 import android.app.Notification;
 import android.app.NotificationManager;
