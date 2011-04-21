@@ -61,8 +61,8 @@ public abstract class BasePreferenceNavigationActivity extends
 	 */
 	public static final int RESULT_BACK = 34980457;
 
-	private NavigationItemEventListener navItemEventListener;
-	private boolean isInitialized = false;
+	private NavigationItemEventListener mNavItemEventListener;
+	private boolean mIsInitialized = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +71,10 @@ public abstract class BasePreferenceNavigationActivity extends
 	}
 	
 	private void initialize() {
-		if(isInitialized) {
+		if(mIsInitialized) {
 			return;
 		}
-		isInitialized = true;
+		mIsInitialized = true;
 		
 		// get the activity's title and set it.
 		try {
@@ -87,7 +87,7 @@ public abstract class BasePreferenceNavigationActivity extends
 		}
 		
 		// use an event handler that cannot be overridden by parent subclasses.
-		navItemEventListener = new NavigationItemEventListener();
+		mNavItemEventListener = new NavigationItemEventListener();
 
 		// get intent data.
 		Intent intent = this.getIntent();
@@ -127,8 +127,8 @@ public abstract class BasePreferenceNavigationActivity extends
 		}
 		
 		// register event handlers
-		this.findViewById(R.id.navigationLeftButton).setOnClickListener(navItemEventListener);
-		this.findViewById(R.id.navigationRightButton).setOnClickListener(navItemEventListener);
+		this.findViewById(R.id.navigationLeftButton).setOnClickListener(mNavItemEventListener);
+		this.findViewById(R.id.navigationRightButton).setOnClickListener(mNavItemEventListener);
 	}
 	
 	@Override
@@ -168,7 +168,7 @@ public abstract class BasePreferenceNavigationActivity extends
 
 	@Override
 	public void setTitle(CharSequence title) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(title);
@@ -176,7 +176,7 @@ public abstract class BasePreferenceNavigationActivity extends
 
 	@Override
 	public void setTitle(int titleId) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(titleId);
@@ -184,7 +184,7 @@ public abstract class BasePreferenceNavigationActivity extends
 
 	@Override
 	public void setTitleColor(int textColor) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationTitle)).setTextColor(textColor);
@@ -195,7 +195,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * @param color	the color to use.
 	 */
 	public void setNavigationTitleBackgroundColor(int color) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationTitleWrapper).setBackgroundColor(color);
@@ -207,7 +207,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * 			View.GONE. (default visible)
 	 */
 	protected void setLeftNavigationButtonVisibility(int v) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationLeftButton).setVisibility(v);
@@ -219,7 +219,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * 			View.GONE. (default gone)
 	 */
 	protected void setRightNavigationButtonVisibility(int v) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationRightButton).setVisibility(v);
@@ -230,14 +230,14 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * @param resId
 	 */
 	protected void setLeftNavigationButtonText(int resId) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationLeftButton)).setText(resId);
 	}
 	
 	private void setLeftNavigationButtonText(CharSequence text) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationLeftButton)).setText(text);
@@ -248,7 +248,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * @param b
 	 */
 	protected void setLeftNavigationButtonEnabled(boolean b) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationLeftButton).setEnabled(b);
@@ -259,14 +259,14 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * @param resId
 	 */
 	protected void setRightNavigationButtonText(int resId) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationRightButton)).setText(resId);
 	}
 	
 	private void setRightNavigationButtonText(CharSequence text) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		((TextView)this.findViewById(R.id.navigationRightButton)).setText(text);
@@ -277,7 +277,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * @param b
 	 */
 	protected void setRightNavigationButtonEnabled(boolean b) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationRightButton).setEnabled(b);
@@ -289,7 +289,7 @@ public abstract class BasePreferenceNavigationActivity extends
 	 * 			View.GONE. (default visible)
 	 */
 	protected void setNavigationTitleBarVisibility(int v) {
-		if(!isInitialized) {
+		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationTitleWrapper).setVisibility(v);

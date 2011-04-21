@@ -1,37 +1,37 @@
 package org.t2health.lib.util;
 
 public class ElapsedTimer {
-	private long elapsedTime = 0;
-	private long startTime = 0;
-	private boolean isStarted = false;
+	private long mElapsedTime = 0;
+	private long mStartTime = 0;
+	private boolean mIsStarted = false;
 	
 	public void start() {
-		if(isStarted) {
+		if(mIsStarted) {
 			return;
 		}
-		this.startTime = System.currentTimeMillis();
-		this.isStarted = true;
+		this.mStartTime = System.currentTimeMillis();
+		this.mIsStarted = true;
 	}
 	
 	public void stop() {
-		if(!isStarted) {
+		if(!mIsStarted) {
 			return;
 		}
-		this.elapsedTime += System.currentTimeMillis() - this.startTime;
-		this.startTime = 0;
-		this.isStarted = false;
+		this.mElapsedTime += System.currentTimeMillis() - this.mStartTime;
+		this.mStartTime = 0;
+		this.mIsStarted = false;
 	}
 	
 	public void reset() {
-		this.elapsedTime = 0;
-		this.startTime = 0;
-		this.isStarted = false;
+		this.mElapsedTime = 0;
+		this.mStartTime = 0;
+		this.mIsStarted = false;
 	}
 	
 	public long getElapsedTime() {
-		if(isStarted) {
-			return this.elapsedTime + System.currentTimeMillis() - this.startTime;
+		if(mIsStarted) {
+			return this.mElapsedTime + System.currentTimeMillis() - this.mStartTime;
 		}
-		return this.elapsedTime;
+		return this.mElapsedTime;
 	}
 }

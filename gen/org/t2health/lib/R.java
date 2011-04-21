@@ -34,33 +34,33 @@ containing a value of this type.
         public static final int t2_base_navigation_title_bg_overlay=0x7f020000;
     }
     public static final class id {
-        public static final int accessibilityActivityContent=0x7f050000;
-        public static final int accessibilityTouchLayer=0x7f050001;
-        public static final int answer1=0x7f05000d;
-        public static final int answer2=0x7f05000f;
-        public static final int detailsButton=0x7f050016;
-        public static final int emptyListView=0x7f050017;
-        public static final int emptyText=0x7f050008;
-        public static final int forgotPasswordButton=0x7f050011;
-        public static final int inputsContainer=0x7f05000a;
-        public static final int list=0x7f050007;
-        public static final int listHeader=0x7f050012;
-        public static final int navigationContent=0x7f050006;
-        public static final int navigationLeftButton=0x7f050003;
-        public static final int navigationRightButton=0x7f050005;
-        public static final int navigationTitle=0x7f050004;
-        public static final int navigationTitleWrapper=0x7f050002;
-        public static final int nextButton=0x7f050019;
-        public static final int passwordEditText=0x7f05000b;
-        public static final int question1=0x7f05000c;
-        public static final int question2=0x7f05000e;
-        public static final int score_wrapper=0x7f050014;
-        public static final int securityEnabled=0x7f050009;
-        public static final int startButton=0x7f050018;
-        public static final int text1=0x7f050013;
-        public static final int total_score=0x7f050015;
-        public static final int unlockButton=0x7f050010;
-        public static final int webview=0x7f05001a;
+        public static final int accessibilityActivityContent=0x7f060000;
+        public static final int accessibilityTouchLayer=0x7f060001;
+        public static final int answer1=0x7f06000d;
+        public static final int answer2=0x7f06000f;
+        public static final int detailsButton=0x7f060016;
+        public static final int emptyListView=0x7f060017;
+        public static final int emptyText=0x7f060008;
+        public static final int forgotPasswordButton=0x7f060011;
+        public static final int inputsContainer=0x7f06000a;
+        public static final int list=0x7f060007;
+        public static final int listHeader=0x7f060012;
+        public static final int navigationContent=0x7f060006;
+        public static final int navigationLeftButton=0x7f060003;
+        public static final int navigationRightButton=0x7f060005;
+        public static final int navigationTitle=0x7f060004;
+        public static final int navigationTitleWrapper=0x7f060002;
+        public static final int nextButton=0x7f060019;
+        public static final int passwordEditText=0x7f06000b;
+        public static final int question1=0x7f06000c;
+        public static final int question2=0x7f06000e;
+        public static final int score_wrapper=0x7f060014;
+        public static final int securityEnabled=0x7f060009;
+        public static final int startButton=0x7f060018;
+        public static final int text1=0x7f060013;
+        public static final int total_score=0x7f060015;
+        public static final int unlockButton=0x7f060010;
+        public static final int webview=0x7f06001a;
     }
     public static final class layout {
         public static final int accessibility_layout=0x7f030000;
@@ -75,44 +75,51 @@ containing a value of this type.
         public static final int webview_layout=0x7f030009;
     }
     public static final class string {
-        public static final int back=0x7f040000;
-        public static final int cancel=0x7f040001;
-        public static final int details=0x7f040017;
-        public static final int eula_accept=0x7f04001d;
-        public static final int eula_refuse=0x7f04001e;
-        public static final int eula_text=0x7f04001f;
+        public static final int access_android_prefs_desc=0x7f050006;
+        /**  Accessibility 
+         */
+        public static final int access_android_prefs_title=0x7f050005;
+        public static final int back=0x7f050000;
+        public static final int cancel=0x7f050001;
+        public static final int details=0x7f050019;
+        public static final int eula_accept=0x7f05001f;
+        public static final int eula_refuse=0x7f050020;
+        public static final int eula_text=0x7f050021;
         /**  EULA 
          */
-        public static final int eula_title=0x7f04001c;
-        public static final int next=0x7f04001a;
-        public static final int no=0x7f040004;
-        public static final int save=0x7f040002;
-        public static final int security_answer_already_set_hint=0x7f040011;
-        public static final int security_bad_input_message=0x7f040015;
-        public static final int security_configure_title=0x7f040007;
-        public static final int security_enabled=0x7f04000c;
-        public static final int security_enter_answer1_hint=0x7f040010;
-        public static final int security_enter_answer2_hint=0x7f040013;
-        public static final int security_enter_password_hint=0x7f04000b;
-        public static final int security_enter_question1_hint=0x7f04000f;
-        public static final int security_enter_question2_hint=0x7f040012;
-        public static final int security_forgot_password_button=0x7f04000a;
-        public static final int security_forgot_password_instructions=0x7f040014;
-        public static final int security_forgot_password_settings=0x7f04000e;
-        public static final int security_forgot_password_title=0x7f040006;
-        public static final int security_password_already_set_hint=0x7f04000d;
-        public static final int security_unlock_button=0x7f040009;
-        public static final int security_unlock_instructions=0x7f040008;
+        public static final int eula_title=0x7f05001e;
+        public static final int next=0x7f05001c;
+        public static final int no=0x7f050004;
+        public static final int save=0x7f050002;
+        public static final int security_answer_already_set_hint=0x7f050013;
+        public static final int security_bad_input_message=0x7f050017;
+        public static final int security_configure_title=0x7f050009;
+        public static final int security_enabled=0x7f05000e;
+        public static final int security_enter_answer1_hint=0x7f050012;
+        public static final int security_enter_answer2_hint=0x7f050015;
+        public static final int security_enter_password_hint=0x7f05000d;
+        public static final int security_enter_question1_hint=0x7f050011;
+        public static final int security_enter_question2_hint=0x7f050014;
+        public static final int security_forgot_password_button=0x7f05000c;
+        public static final int security_forgot_password_instructions=0x7f050016;
+        public static final int security_forgot_password_settings=0x7f050010;
+        public static final int security_forgot_password_title=0x7f050008;
+        public static final int security_password_already_set_hint=0x7f05000f;
+        public static final int security_unlock_button=0x7f05000b;
+        public static final int security_unlock_instructions=0x7f05000a;
         /**  Security 
          */
-        public static final int security_unlock_title=0x7f040005;
-        public static final int send_results=0x7f040018;
-        public static final int send_results_subject=0x7f04001b;
-        public static final int start_questionare=0x7f040019;
+        public static final int security_unlock_title=0x7f050007;
+        public static final int send_results=0x7f05001a;
+        public static final int send_results_subject=0x7f05001d;
+        public static final int start_questionare=0x7f05001b;
         /**  QA 
          */
-        public static final int total_score=0x7f040016;
-        public static final int yes=0x7f040003;
+        public static final int total_score=0x7f050018;
+        public static final int yes=0x7f050003;
+    }
+    public static final class xml {
+        public static final int accessibility_pref=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a AbsoluteLayout_Layout.

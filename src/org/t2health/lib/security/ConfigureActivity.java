@@ -18,14 +18,14 @@ import android.widget.Toast;
 
 
 public class ConfigureActivity extends BaseNavigationActivity implements OnCheckedChangeListener, OnKeyListener {
-	private CheckBox enabledCheckbox;
-	private ViewGroup inputsContainer;
-	private EditText passwordEditText;
-	private EditText question1EditText;
-	private EditText answer1EditText;
-	private EditText question2EditText;
-	private EditText answer2EditText;
-	private boolean changesMade = false;
+	private CheckBox mEnabledCheckbox;
+	private ViewGroup mInputsContainer;
+	private EditText mPasswordEditText;
+	private EditText mQuestion1EditText;
+	private EditText mAnswer1EditText;
+	private EditText mQuestion2EditText;
+	private EditText mAnswer2EditText;
+	private boolean mChangesMade = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,49 +34,49 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 		this.setTitle(R.string.security_configure_title);
 		
 		// get the form elements and assign their events.
-		inputsContainer = (ViewGroup)this.findViewById(R.id.inputsContainer);
+		mInputsContainer = (ViewGroup)this.findViewById(R.id.inputsContainer);
 		
-		passwordEditText = (EditText)this.findViewById(R.id.passwordEditText);
-		passwordEditText.setOnKeyListener(this);
+		mPasswordEditText = (EditText)this.findViewById(R.id.passwordEditText);
+		mPasswordEditText.setOnKeyListener(this);
 		
-		question1EditText = (EditText)this.findViewById(R.id.question1);
-		question1EditText.setOnKeyListener(this);
+		mQuestion1EditText = (EditText)this.findViewById(R.id.question1);
+		mQuestion1EditText.setOnKeyListener(this);
 		
-		answer1EditText = (EditText)this.findViewById(R.id.answer1);
-		answer1EditText.setOnKeyListener(this);
+		mAnswer1EditText = (EditText)this.findViewById(R.id.answer1);
+		mAnswer1EditText.setOnKeyListener(this);
 		
-		question2EditText = (EditText)this.findViewById(R.id.question2);
-		question2EditText.setOnKeyListener(this);
+		mQuestion2EditText = (EditText)this.findViewById(R.id.question2);
+		mQuestion2EditText.setOnKeyListener(this);
 		
-		answer2EditText = (EditText)this.findViewById(R.id.answer2);
-		answer2EditText.setOnKeyListener(this);
+		mAnswer2EditText = (EditText)this.findViewById(R.id.answer2);
+		mAnswer2EditText.setOnKeyListener(this);
 		
-		enabledCheckbox = (CheckBox)this.findViewById(R.id.securityEnabled);
-		enabledCheckbox.setOnCheckedChangeListener(this);
-		enabledCheckbox.setChecked(SharedPref.Security.isEnabled(this));
+		mEnabledCheckbox = (CheckBox)this.findViewById(R.id.securityEnabled);
+		mEnabledCheckbox.setOnCheckedChangeListener(this);
+		mEnabledCheckbox.setChecked(SharedPref.Security.isEnabled(this));
 
 		// Indicate that these fields have data behind them via hint text.
 		if(SharedPref.Security.isPasswordSet(this)) {
-			passwordEditText.setHint(R.string.security_password_already_set_hint);
+			mPasswordEditText.setHint(R.string.security_password_already_set_hint);
 		}
 		if(SharedPref.Security.isAnswer1Set(this)) {
-			answer1EditText.setHint(R.string.security_answer_already_set_hint);
+			mAnswer1EditText.setHint(R.string.security_answer_already_set_hint);
 		}
 		if(SharedPref.Security.isAnswer2Set(this)) {
-			answer2EditText.setHint(R.string.security_answer_already_set_hint);
+			mAnswer2EditText.setHint(R.string.security_answer_already_set_hint);
 		}
 		
 		// set the values of the question edit text fields.
-		question1EditText.setText(SharedPref.Security.getQuestion1(this));
-		question2EditText.setText(SharedPref.Security.getQuestion2(this));
+		mQuestion1EditText.setText(SharedPref.Security.getQuestion1(this));
+		mQuestion2EditText.setText(SharedPref.Security.getQuestion2(this));
 		
-		setFieldsEnabled(enabledCheckbox.isChecked());
+		setFieldsEnabled(mEnabledCheckbox.isChecked());
 		setRightNavigationButtonEnabled(validSecurityDataEntererd());
 		setRightNavigationButtonText(R.string.save);
 		setRightNavigationButtonVisibility(View.VISIBLE);
 		setLeftNavigationButtonText(R.string.cancel);
 		
-		this.changesMade = false;
+		this.mChangesMade = false;
 		
 		// Hide the keyboard unless the user chooses a text view.
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -89,12 +89,12 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 			return;
 		}
 		
-		boolean enabled = enabledCheckbox.isChecked();
-		String password = passwordEditText.getText().toString().trim();
-		String q1 = question1EditText.getText().toString().trim();
-		String a1 = answer1EditText.getText().toString().trim();
-		String q2 = question2EditText.getText().toString().trim();
-		String a2 = answer2EditText.getText().toString().trim();
+		boolean enabled = mEnabledCheckbox.isChecked();
+		String password = mPasswordEditText.getText().toString().trim();
+		String q1 = mQuestion1EditText.getText().toString().trim();
+		String a1 = mAnswer1EditText.getText().toString().trim();
+		String q2 = mQuestion2EditText.getText().toString().trim();
+		String a2 = mAnswer2EditText.getText().toString().trim();
 		
 		SharedPref.Security.setEnabled(this, enabled);
 		if(enabled) {
@@ -118,13 +118,13 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 	}
 	
 	private boolean validSecurityDataEntererd() {
-		String password = passwordEditText.getText().toString().trim();
-		String q1 = question1EditText.getText().toString().trim();
-		String a1 = answer1EditText.getText().toString().trim();
-		String q2 = question2EditText.getText().toString().trim();
-		String a2 = answer2EditText.getText().toString().trim();
+		String password = mPasswordEditText.getText().toString().trim();
+		String q1 = mQuestion1EditText.getText().toString().trim();
+		String a1 = mAnswer1EditText.getText().toString().trim();
+		String q2 = mQuestion2EditText.getText().toString().trim();
+		String a2 = mAnswer2EditText.getText().toString().trim();
 		
-		return !enabledCheckbox.isChecked() || 
+		return !mEnabledCheckbox.isChecked() || 
 			(
 				(password.length() > 0 || SharedPref.Security.isPasswordSet(this)) && 
 				q1.length() > 0 &&
@@ -135,28 +135,28 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 	}
 	
 	private void setFieldsEnabled(boolean b) {
-		inputsContainer.setEnabled(b);
-		for(int i = 0; i < inputsContainer.getChildCount(); ++i) {
-			inputsContainer.getChildAt(i).setEnabled(b);
+		mInputsContainer.setEnabled(b);
+		for(int i = 0; i < mInputsContainer.getChildCount(); ++i) {
+			mInputsContainer.getChildAt(i).setEnabled(b);
 		}
 		
 		if(b) {
-			passwordEditText.requestFocus();
+			mPasswordEditText.requestFocus();
 		} else {
-			enabledCheckbox.requestFocus();
+			mEnabledCheckbox.requestFocus();
 		}
 	}
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		this.changesMade = true;
+		this.mChangesMade = true;
 		setFieldsEnabled(isChecked);
 		setRightNavigationButtonEnabled(validSecurityDataEntererd());
 	}
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		this.changesMade = true;
+		this.mChangesMade = true;
 		this.setRightNavigationButtonEnabled(validSecurityDataEntererd());
 		return false;
 	}

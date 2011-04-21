@@ -16,8 +16,8 @@ import android.widget.TextView.OnEditorActionListener;
 
 
 public class ForgotPasswordActivity extends BaseNavigationActivity implements OnKeyListener, OnEditorActionListener, OnClickListener {
-	private EditText answer1EditText;
-	private EditText answer2EditText;
+	private EditText mAnswer1EditText;
+	private EditText mAnswer2EditText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,13 @@ public class ForgotPasswordActivity extends BaseNavigationActivity implements On
 				SharedPref.Security.getQuestion2(this)
 		);
 		
-		answer1EditText = (EditText)this.findViewById(R.id.answer1);
-		answer1EditText.setOnKeyListener(this);
-		answer1EditText.setOnEditorActionListener(this);
+		mAnswer1EditText = (EditText)this.findViewById(R.id.answer1);
+		mAnswer1EditText.setOnKeyListener(this);
+		mAnswer1EditText.setOnEditorActionListener(this);
 		
-		answer2EditText = (EditText)this.findViewById(R.id.answer2);
-		answer2EditText.setOnKeyListener(this);
-		answer1EditText.setOnEditorActionListener(this);
+		mAnswer2EditText = (EditText)this.findViewById(R.id.answer2);
+		mAnswer2EditText.setOnKeyListener(this);
+		mAnswer1EditText.setOnEditorActionListener(this);
 		
 		this.findViewById(R.id.unlockButton).setOnClickListener(this);
 	}
@@ -72,12 +72,12 @@ public class ForgotPasswordActivity extends BaseNavigationActivity implements On
 	private void checkForMatchedAnswers() {
 		boolean match1 = SharedPref.Security.doesAnswer1Match(
 				this, 
-				answer1EditText.getText().toString()
+				mAnswer1EditText.getText().toString()
 		);
 			
 		boolean match2 = SharedPref.Security.doesAnswer2Match(
 				this, 
-				answer2EditText.getText().toString()
+				mAnswer2EditText.getText().toString()
 		);
 		
 		if(match1 && match2) {

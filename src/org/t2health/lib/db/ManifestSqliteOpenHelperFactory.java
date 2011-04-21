@@ -17,13 +17,13 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
  *
  */
 public class ManifestSqliteOpenHelperFactory implements OpenHelperManager.SqliteOpenHelperFactory {
-	private static ManifestSqliteOpenHelperFactory factoryInstance;
+	private static ManifestSqliteOpenHelperFactory sFactoryInstance;
 	
 	public static ManifestSqliteOpenHelperFactory getInstance() {
-		if(factoryInstance == null) {
-			factoryInstance = new ManifestSqliteOpenHelperFactory();
+		if(sFactoryInstance == null) {
+			sFactoryInstance = new ManifestSqliteOpenHelperFactory();
 		}
-		return factoryInstance;
+		return sFactoryInstance;
 	}
 	
 	private ManifestSqliteOpenHelperFactory() {

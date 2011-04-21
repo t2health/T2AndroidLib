@@ -32,8 +32,8 @@ public class ManifestMetaData {
 	
 	private static final String DEBUG_MODE = "debugMode";
 	
-	private static Bundle applicationMetaData;
-	private static HashMap<String,Object> itemCache = new HashMap<String,Object>();
+	private static Bundle sApplicationMetaData;
+	private static HashMap<String,Object> aItemCache = new HashMap<String,Object>();
 	
 	/**
 	 * Loads the manifest meta-data into a cached bundle.
@@ -41,7 +41,7 @@ public class ManifestMetaData {
 	 */
 	private static void initAppBundle(Context c) {
 		// meta-data already read, use the cache version.
-		if(applicationMetaData != null) {
+		if(sApplicationMetaData != null) {
 			return;
 		}
 		
@@ -53,24 +53,24 @@ public class ManifestMetaData {
 					context.getPackageName(), 
 					PackageManager.GET_META_DATA
 			);
-			applicationMetaData = ai.metaData;
+			sApplicationMetaData = ai.metaData;
 			
 		} catch (NameNotFoundException e) {
 			// ignore
 		}
 		
 		// Could not load meta-data, make empty bundle
-		if(applicationMetaData == null) {
-			applicationMetaData = new Bundle();
+		if(sApplicationMetaData == null) {
+			sApplicationMetaData = new Bundle();
 		}
 	}
 	
 	private static Object getCache(String key) {
-		return itemCache.get(key);
+		return aItemCache.get(key);
 	}
 	
 	private static void setCache(String key, Object value) {
-		itemCache.put(key, value);
+		aItemCache.put(key, value);
 	}
 	
 	
@@ -82,7 +82,7 @@ public class ManifestMetaData {
 	 */
 	public static String getString(Context c, String name) {
 		initAppBundle(c);
-		return applicationMetaData.getString(name);
+		return sApplicationMetaData.getString(name);
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class ManifestMetaData {
 	 */
 	public static int getInt(Context c, String name) {
 		initAppBundle(c);
-		return applicationMetaData.getInt(name);
+		return sApplicationMetaData.getInt(name);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class ManifestMetaData {
 	 */
 	public static boolean getBoolean(Context c, String name) {
 		initAppBundle(c);
-		return applicationMetaData.getBoolean(name);
+		return sApplicationMetaData.getBoolean(name);
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class ManifestMetaData {
 	 */
 	public static float getFloat(Context c, String name) {
 		initAppBundle(c);
-		return applicationMetaData.getFloat(name);
+		return sApplicationMetaData.getFloat(name);
 	}
 	
 	/**

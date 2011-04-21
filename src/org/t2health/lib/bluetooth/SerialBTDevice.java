@@ -27,31 +27,31 @@ public abstract class SerialBTDevice {
 	
 	public static final UUID UUID_RFCOMM_GENERIC = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	
-	private final BluetoothAdapter adapter;
-	private final BluetoothDevice device;
-	private BluetoothSocket socket;
-	private ConnectedThread connectedThread;
-	private DeviceConnectionListener connectionListener;
+	private final BluetoothAdapter mAdapter;
+	private final BluetoothDevice mDevice;
+	private BluetoothSocket mSsocket;
+	private ConnectedThread mConnectedThread;
+	private DeviceConnectionListener mConnectionListener;
 	
-	private boolean reconnectOnConnectionLost = true;
+	private boolean mReconnectOnConnectionLost = true;
 	
-	private ArrayList<Byte[]> writeQueue = new ArrayList<Byte[]>();
+	private ArrayList<Byte[]> mWriteQueue = new ArrayList<Byte[]>();
 	
-	private Handler threadHandler;
+	private Handler mThreadHandler;
 
-	private ConnectThread connectThread;
+	private ConnectThread mConnectThread;
 	
 	public SerialBTDevice() {
-		this.adapter = BluetoothAdapter.getDefaultAdapter();
+		this.mAdapter = BluetoothAdapter.getDefaultAdapter();
 		
 		if(!BluetoothAdapter.checkBluetoothAddress(this.getDeviceAddress())) {
-			this.device = null;
+			this.mDevice = null;
 			throw new InvalidBluetoothAddressException("\""+ this.getDeviceAddress() +"\" is an invalid bluetooth device address.");
 		}
 		
-		this.device = this.adapter.getRemoteDevice(this.getDeviceAddress());
+		this.mDevice = this.mAdapter.getRemoteDevice(this.getDeviceAddress());
 		
-		threadHandler = new Handler() {
+		mThreadHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
 				switch(msg.what) {
@@ -62,7 +62,7 @@ public abstract class SerialBTDevice {
 						deviceConnectionLost();
 						break;
 					case MSG_MANAGE_SOCKET:
-						manageConnection(socket);
+						manageConnection(mSsocket);
 						break;
 					case MSG_BYTES_RECEIVED:
 						onBytesReceived(msg.getData().getByteArray("bytes"));
@@ -78,8 +78,8 @@ public abstract class SerialBTDevice {
 	 */
 	public boolean isConnecting() {
 		if(!this.isConencted()) {
-			if(this.connectThread != null && 
-					this.connectThread.isRunning()) {
+			if(this.mConnectThread != null && 
+					this.mConnectThread.isRunning()) {
 				return true;
 			}
 		}
@@ -92,10 +92,10 @@ public abstract class SerialBTDevice {
 	 * @return
 	 */
 	public boolean isConencted() {
-		if(this.connectedThread == null) {
+		if(this.mConnectedThread == null) {
 			return false;
 		}
-		return this.connectedThread.isRunning();
+		return this.mConnectedThread.isRunning();
 	}
 	
 	/**
@@ -103,7 +103,7 @@ public abstract class SerialBTDevice {
 	 * @return
 	 */
 	public BluetoothDevice getDevice() {
-		return this.device;
+		return this.mDevice;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public abstract class SerialBTDevice {
 	 * @return
 	 */
 	public String getAddress() {
-		return this.device.getAddress();
+		return this.mDevice.getAddress();
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public abstract class SerialBTDevice {
 	 * @return
 	 */
 	public String getName() {
-		return this.device.getName();
+		return this.mDevice.getName();
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public abstract class SerialBTDevice {
 	 * @return
 	 */
 	public boolean isInitialized() {
-		return this.device != null;
+		return this.mDevice != null;
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public abstract class SerialBTDevice {
 	 * @param t
 	 */
 	public void setDeviceConnectionListener(DeviceConnectionListener t) {
-		this.connectionListener = t;
+		this.mConnectionListener = t;
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public abstract class SerialBTDevice {
 		if(!isInitialized()) {
 			return false;
 		}
-		return this.device.getBondState() == BluetoothDevice.BOND_BONDED;
+		return this.mDevice.getBondState() == BluetoothDevice.BOND_BONDED;
 	}
 	
 	/**
@@ -166,7 +166,7 @@ public abstract class SerialBTDevice {
 		
 		// See if this device is paired.
 		if(!this.isBonded()) {
-			throw new DeviceNotBondedException("The bluetooth device "+ this.device.getAddress() +" is not bonded (paired).");
+			throw new DeviceNotBondedException("The bluetooth device "+ this.mDevice.getAddress() +" is not bonded (paired).");
 		}
 		
 		// Notify that we have begun the connecting process.
@@ -174,8 +174,8 @@ public abstract class SerialBTDevice {
 		
 //		Log.v(TAG, "BT connect");
 		// Begin connecting.
-		this.connectThread = new ConnectThread(this.device);
-		this.connectThread.start();
+		this.mConnectThread = new ConnectThread(this.mDevice);
+		this.mConnectThread.start();
 	}
 	
 	/**
@@ -199,16 +199,16 @@ public abstract class SerialBTDevice {
 			this.beforeDeviceClosed();
 		}
 		
-		if(this.connectedThread != null) {
-			this.connectedThread.cancel();
-			this.connectedThread.interrupt();
-			this.connectedThread = null;
+		if(this.mConnectedThread != null) {
+			this.mConnectedThread.cancel();
+			this.mConnectedThread.interrupt();
+			this.mConnectedThread = null;
 		}
 		
-		if(this.connectThread != null) {
-			this.connectThread.cancel();
-			this.connectThread.interrupt();
-			this.connectThread = null;
+		if(this.mConnectThread != null) {
+			this.mConnectThread.cancel();
+			this.mConnectThread.interrupt();
+			this.mConnectThread = null;
 		}
 		
 		if(report) {
@@ -218,15 +218,15 @@ public abstract class SerialBTDevice {
 	
 	private void deviceConnecting() {
 //		Log.v(TAG, "Device connecting.");
-		if(connectionListener != null) {
-			connectionListener.onDeviceConnecting(this);
+		if(mConnectionListener != null) {
+			mConnectionListener.onDeviceConnecting(this);
 		}
 	}
 	
 	private void deviceConnected() {
 //		Log.v(TAG, "Device connected.");
-		if(connectionListener != null) {
-			connectionListener.onDeviceConnected(this);
+		if(mConnectionListener != null) {
+			mConnectionListener.onDeviceConnected(this);
 		}
 		this.onDeviceConnected();
 	}
@@ -234,8 +234,8 @@ public abstract class SerialBTDevice {
 	private void beforeDeviceClosed() {
 		if(this.isConencted()) {
 //			Log.v(TAG, "Run before device disconnected.");
-			if(connectionListener != null) {
-				connectionListener.onBeforeDeviceClosed(this);
+			if(mConnectionListener != null) {
+				mConnectionListener.onBeforeDeviceClosed(this);
 			}
 			this.onBeforeConnectionClosed();
 		}
@@ -243,19 +243,19 @@ public abstract class SerialBTDevice {
 	
 	private void deviceClosed() {
 //		Log.v(TAG, "Device disconnected.");
-		if(connectionListener != null) {
-			connectionListener.onDeviceClosed(this);
+		if(mConnectionListener != null) {
+			mConnectionListener.onDeviceClosed(this);
 		}
 	}
 	
 	private void deviceConnectionLost() {
 //		Log.v(TAG, "Lost the connection to the device.");
-		if(connectionListener != null) {
-			connectionListener.onDeviceConnectionLost(this);
+		if(mConnectionListener != null) {
+			mConnectionListener.onDeviceConnectionLost(this);
 		}
 		
 		// Try to reconnect.
-		if(this.isBonded() && reconnectOnConnectionLost) {
+		if(this.isBonded() && mReconnectOnConnectionLost) {
 //			Log.v(TAG, "Trying to reconnect to the device.");
 			this.connect();
 		}
@@ -289,29 +289,29 @@ public abstract class SerialBTDevice {
 	protected abstract void onConnectedClosed();
 	
 	private void manageConnection(BluetoothSocket socket) {
-		this.connectedThread = new ConnectedThread(socket);
-		this.connectedThread.start();
+		this.mConnectedThread = new ConnectedThread(socket);
+		this.mConnectedThread.start();
 	}
 	
 	private void pushQueuedBytes() {
 		// if there are queued Byte[], write them.
-		while(writeQueue.size() > 0) {
-			Byte[] qBytes = writeQueue.get(0);
+		while(mWriteQueue.size() > 0) {
+			Byte[] qBytes = mWriteQueue.get(0);
 			byte[] bytes = new byte[qBytes.length];
 			
 			for(int i = 0; i < qBytes.length; i++) {
 				bytes[i] = qBytes[i];
 			}
 			
-			connectedThread.write(bytes);
-			writeQueue.remove(0);
+			mConnectedThread.write(bytes);
+			mWriteQueue.remove(0);
 		}
 	}
 	
 	protected void write(byte[] bytes) {
 		// Immediately write the bytes.
-		if(this.connectedThread != null && this.connectedThread.isRunning()) {
-			this.connectedThread.write(bytes);
+		if(this.mConnectedThread != null && this.mConnectedThread.isRunning()) {
+			this.mConnectedThread.write(bytes);
 			return;
 		}
 		
@@ -320,7 +320,7 @@ public abstract class SerialBTDevice {
 		for(int i = 0; i < bytes.length; i++) {
 			qBytes[i] = bytes[i];
 		}
-		this.writeQueue.add(qBytes);
+		this.mWriteQueue.add(qBytes);
 	}
 	
 	/**
@@ -450,8 +450,8 @@ public abstract class SerialBTDevice {
 			
 			// Tell the main thread to manage the socket.
 			if(tmpSocket != null) {
-				socket = tmpSocket;
-				threadHandler.sendEmptyMessage(MSG_MANAGE_SOCKET);
+				mSsocket = tmpSocket;
+				mThreadHandler.sendEmptyMessage(MSG_MANAGE_SOCKET);
 			}
 		}
 		
@@ -504,7 +504,7 @@ public abstract class SerialBTDevice {
 				try {
 					bytes = this.inputStream.read(buffer);
 					if(!this.isConnected) {
-						threadHandler.sendEmptyMessage(MSG_CONNECTED);
+						mThreadHandler.sendEmptyMessage(MSG_CONNECTED);
 						pushQueuedBytes();
 					}
 					this.isConnected = true;
@@ -524,13 +524,13 @@ public abstract class SerialBTDevice {
 						msg.what = MSG_BYTES_RECEIVED;
 						msg.setData(data);
 						
-						threadHandler.sendMessage(msg);
+						mThreadHandler.sendMessage(msg);
 					}
 					
 				// Lost the connection for some reason.
 				} catch (IOException e1) {
 					if(!this.cancelled) {
-						threadHandler.sendEmptyMessage(MSG_CONNECTION_LOST);
+						mThreadHandler.sendEmptyMessage(MSG_CONNECTION_LOST);
 					}
 					break;
 				}

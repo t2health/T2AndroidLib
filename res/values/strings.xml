@@ -6,6 +6,10 @@
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 
+	<!-- Accessibility -->
+	<string name="access_android_prefs_title">System Accessibility</string>
+	<string name="access_android_prefs_desc">Set Android\'s accessibility preferences</string>
+
 	<!-- Security -->
 	<string name="security_unlock_title">Unlock</string>
 	<string name="security_forgot_password_title">Forgot Password</string>

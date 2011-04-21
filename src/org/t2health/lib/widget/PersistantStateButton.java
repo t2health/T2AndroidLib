@@ -11,7 +11,7 @@ import android.widget.Checkable;
  *
  */
 public class PersistantStateButton extends Button implements Checkable{
-	private boolean isChecked = false;
+	private boolean mIsChecked = false;
 
 	public PersistantStateButton(Context context) {
 		super(context);
@@ -27,18 +27,18 @@ public class PersistantStateButton extends Button implements Checkable{
 
 	@Override
 	public void setChecked(boolean isChecked) {
-		this.isChecked = isChecked;
+		this.mIsChecked = isChecked;
 		this.refreshDrawableState();
 	}
 
 	@Override
 	public boolean isChecked() {
-		return isChecked;
+		return mIsChecked;
 	}
 	
 	@Override
 	public void toggle() {
-		setChecked(!this.isChecked);
+		setChecked(!this.mIsChecked);
 	}
 
 	@Override

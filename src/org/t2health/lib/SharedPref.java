@@ -15,17 +15,17 @@ import android.preference.PreferenceManager;
  *
  */
 public class SharedPref {
-	private static SharedPreferences sharedPref;
+	private static SharedPreferences sSharedPref;
 	
 	private static void init(Context c) {
-		if(sharedPref == null) {
-			sharedPref = PreferenceManager.getDefaultSharedPreferences(c.getApplicationContext());
+		if(sSharedPref == null) {
+			sSharedPref = PreferenceManager.getDefaultSharedPreferences(c.getApplicationContext());
 		}
 	}
 	
 	public SharedPreferences getSharedPreferences(Context c) {
 		init(c);
-		return sharedPref;
+		return sSharedPref;
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class SharedPref {
 	 */
 	public static boolean getBoolean(Context c, String key, boolean defValue) {
 		init(c);
-		return sharedPref.getBoolean(key, defValue);
+		return sSharedPref.getBoolean(key, defValue);
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class SharedPref {
 	 */
 	public static float getFloat(Context c, String key, float defValue) {
 		init(c);
-		return sharedPref.getFloat(key, defValue);
+		return sSharedPref.getFloat(key, defValue);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class SharedPref {
 	 */
 	public static int getInt(Context c, String key, int defValue) {
 		init(c);
-		return sharedPref.getInt(key, defValue);
+		return sSharedPref.getInt(key, defValue);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class SharedPref {
 	 */
 	public static long getLong(Context c, String key, long defValue) {
 		init(c);
-		return sharedPref.getLong(key, defValue);
+		return sSharedPref.getLong(key, defValue);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class SharedPref {
 	 */
 	public static String getString(Context c, String key, String defValue) {
 		init(c);
-		return sharedPref.getString(key, defValue);
+		return sSharedPref.getString(key, defValue);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class SharedPref {
 	 */
 	public static void putBoolean(Context c, String key, boolean value) {
 		init(c);
-		sharedPref.edit().putBoolean(key, value).commit();
+		sSharedPref.edit().putBoolean(key, value).commit();
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class SharedPref {
 	 */
 	public static void putFloat(Context c, String key, float value) {
 		init(c);
-		sharedPref.edit().putFloat(key, value).commit();
+		sSharedPref.edit().putFloat(key, value).commit();
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class SharedPref {
 	 */
 	public static void putInt(Context c, String key, int value) {
 		init(c);
-		sharedPref.edit().putInt(key, value).commit();
+		sSharedPref.edit().putInt(key, value).commit();
 	}
 	
 	/**
@@ -129,7 +129,7 @@ public class SharedPref {
 	 */
 	public static void putLong(Context c, String key, long value) {
 		init(c);
-		sharedPref.edit().putLong(key, value).commit();
+		sSharedPref.edit().putLong(key, value).commit();
 	}
 	
 	/**
@@ -140,7 +140,7 @@ public class SharedPref {
 	 */
 	public static void putString(Context c, String key, String value) {
 		init(c);
-		sharedPref.edit().putString(key, value).commit();
+		sSharedPref.edit().putString(key, value).commit();
 	}
 	
 	
@@ -180,11 +180,11 @@ public class SharedPref {
 		
 		
 		public static String getQuestion1(Context c) {
-			return getQuestion(c, 1, sharedPref);
+			return getQuestion(c, 1, sSharedPref);
 		}
 		
 		public static String getQuestion2(Context c) {
-			return getQuestion(c, 2, sharedPref);
+			return getQuestion(c, 2, sSharedPref);
 		}
 		
 		public static boolean doesAnswer1Match(Context c, String answer) {

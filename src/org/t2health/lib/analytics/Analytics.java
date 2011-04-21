@@ -20,12 +20,12 @@ public class Analytics {
 		FLURRY
 	};
 	
-	private static Provider currentProvider;
-	private static String providerKey;
-	private static AnalyticsProvider analytics;
-	private static boolean isEnabled = false;
-	private static boolean isDebugEnabled = false;
-	private static boolean isSessionStarted = false;
+	private static Provider sCurrentProvider;
+	private static String sProviderKey;
+	private static AnalyticsProvider sAnalytics;
+	private static boolean sIsEnabled = false;
+	private static boolean sIsDebugEnabled = false;
+	private static boolean sIsSessionStarted = false;
 	
 	/**
 	 * Initialize the analytics system. This method should be the first called
@@ -39,19 +39,19 @@ public class Analytics {
 			return;
 		}
 		
-		if(currentProvider != null && currentProvider != provider && apiKey != providerKey) {
+		if(sCurrentProvider != null && sCurrentProvider != provider && apiKey != sProviderKey) {
 			throw new RuntimeException("Analytics provider was already set. You cannot change it.");
 		}
-		currentProvider = provider;
-		providerKey = apiKey;
+		sCurrentProvider = provider;
+		sProviderKey = apiKey;
 		
-		if(currentProvider == Provider.FLURRY) {
-			analytics = new FlurryProvider();
+		if(sCurrentProvider == Provider.FLURRY) {
+			sAnalytics = new FlurryProvider();
 		}
 		
-		analytics.init();
-		analytics.setApiKey(providerKey);
-		isEnabled = enabled;
+		sAnalytics.init();
+		sAnalytics.setApiKey(sProviderKey);
+		sIsEnabled = enabled;
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class Analytics {
 	 * 				all calls to the underlying provider class.
 	 */
 	public static void setEnabled(boolean en) {
-		isEnabled = en;
+		sIsEnabled = en;
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class Analytics {
 	 * @return	true if analytics is enabled.
 	 */
 	public static boolean isEnabled() {
-		return isEnabled;
+		return sIsEnabled;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class Analytics {
 	 * 			provider class.
 	 */
 	private static boolean isReady() {
-		return isEnabled && analytics != null;
+		return sIsEnabled && sAnalytics != null;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class Analytics {
 	 * @param b	
 	 */
 	public static void setDebugEnabled(boolean b) {
-		isDebugEnabled = b;
+		sIsDebugEnabled = b;
 	}
 	
 	/**
@@ -107,7 +107,7 @@ public class Analytics {
 	 * @return
 	 */
 	public static boolean isDebugEnabled() {
-		return isDebugEnabled;
+		return sIsDebugEnabled;
 	}
 
 	/**
@@ -115,9 +115,9 @@ public class Analytics {
 	 * @param context
 	 */
 	public static void onStartSession(Context context) {
-		if(isReady() && !isSessionStarted) {
-			analytics.onStartSession(context);
-			isSessionStarted = true;
+		if(isReady() && !sIsSessionStarted) {
+			sAnalytics.onStartSession(context);
+			sIsSessionStarted = true;
 		}
 	}
 
@@ -126,9 +126,9 @@ public class Analytics {
 	 * @param context
 	 */
 	public static void onEndSession(Context context) {
-		if(isReady() && isSessionStarted) {
-			analytics.onEndSession(context);
-			isSessionStarted = false;
+		if(isReady() && sIsSessionStarted) {
+			sAnalytics.onEndSession(context);
+			sIsSessionStarted = false;
 		}
 	}
 
@@ -140,7 +140,7 @@ public class Analytics {
 	 */
 	public static void onEvent(String event, String key, String value) {
 		if(isReady()) {
-			analytics.onEvent(event, key, value);
+			sAnalytics.onEvent(event, key, value);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class Analytics {
 	 */
 	public static void onEvent(String event, Bundle parameters) {
 		if(isReady()) {
-			analytics.onEvent(event, parameters);
+			sAnalytics.onEvent(event, parameters);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class Analytics {
 	 */
 	public static void onEvent(String event) {
 		if(isReady()) {
-			analytics.onEvent(event);
+			sAnalytics.onEvent(event);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class Analytics {
 	 */
 	public static void onEvent(String event, Map<String,String> parameters) {
 		if(isReady()) {
-			analytics.onEvent(event, parameters);
+			sAnalytics.onEvent(event, parameters);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class Analytics {
 	 */
 	public static void onPageView() {
 		if(isReady()) {
-			analytics.onPageView();
+			sAnalytics.onPageView();
 		}
 	}
 }

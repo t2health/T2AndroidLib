@@ -96,16 +96,16 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	protected static final String LIST_ITEM_ID = "id";
 	private static final String TAG = XMLItemsBrowserActivity.class.getSimpleName();
 
-	private int xmlResource = -1;
+	private int mXmlResource = -1;
 
-	private int seperatorResId = -1;
-	private String[] seperatorFrom;
-	private int[] seperatorTo;
+	private int mSeperatorResId = -1;
+	private String[] mSeperatorFrom;
+	private int[] mSeperatorTo;
 
-	private int itemResId = -1;
-	private String[] itemFrom;
-	private int[] itemTo;
-	protected LinkedHashMap<String, Item> itemsMap;
+	private int mItemResId = -1;
+	private String[] mItemFrom;
+	private int[] mItemTo;
+	protected LinkedHashMap<String, Item> mItemsMap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,11 +113,11 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 		Intent intent = this.getIntent();
 
-		this.seperatorResId = intent.getIntExtra(EXTRA_LIST_SEPARATOR_RES_ID, this.getHeaderLayoutResId());
-		this.itemResId = intent.getIntExtra(EXTRA_LIST_ITEM_RES_ID, this.getItemLayoutResId());
+		this.mSeperatorResId = intent.getIntExtra(EXTRA_LIST_SEPARATOR_RES_ID, this.getHeaderLayoutResId());
+		this.mItemResId = intent.getIntExtra(EXTRA_LIST_ITEM_RES_ID, this.getItemLayoutResId());
 
 		this.setSeparatorResource(
-				this.seperatorResId,
+				this.mSeperatorResId,
 				new String[]{
 						LIST_ITEM_TITLE,
 				},
@@ -126,7 +126,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 				}
 		);
 		this.setItemResource(
-				this.itemResId,
+				this.mItemResId,
 				new String[]{
 						LIST_ITEM_TITLE,
 				},
@@ -151,14 +151,14 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			baseXMLItemId = BASE_ITEM_ID;
 		}
 
-		this.itemsMap = this.loadItemsFromXML(this.xmlResource, baseXMLItemId);
-		Item baseItem = this.itemsMap.get(baseXMLItemId);
+		this.mItemsMap = this.loadItemsFromXML(this.mXmlResource, baseXMLItemId);
+		Item baseItem = this.mItemsMap.get(baseXMLItemId);
 
 		if(baseItem == null) {
 			return;
 		}
 
-		if(baseItem.hasItems(this.itemsMap)) {
+		if(baseItem.hasItems(this.mItemsMap)) {
 			ListView listView = new ListView(this);
 			listView.setScrollingCacheEnabled(false);
 			listView.setCacheColorHint(Color.TRANSPARENT);
@@ -215,7 +215,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @return
 	 */
 	public boolean isXMLResourceSet() {
-		return this.xmlResource != -1;
+		return this.mXmlResource != -1;
 	}
 	
 	/**
@@ -223,7 +223,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @param xmlRes
 	 */
 	public void setXMLResource(int xmlRes) {
-		this.xmlResource = xmlRes;
+		this.mXmlResource = xmlRes;
 	}
 	
 	/**
@@ -231,7 +231,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @return
 	 */
 	public int getXMLResource() {
-		return this.xmlResource;
+		return this.mXmlResource;
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @return
 	 */
 	public boolean isSeparatorResourceSet() {
-		return this.seperatorResId != -1 && this.seperatorFrom != null && this.seperatorTo != null;
+		return this.mSeperatorResId != -1 && this.mSeperatorFrom != null && this.mSeperatorTo != null;
 	}
 
 	/**
@@ -250,9 +250,9 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @param to
 	 */
 	public void setSeparatorResource(int layoutId, String[] from, int[] to) {
-		this.seperatorResId = layoutId;
-		this.seperatorFrom = from;
-		this.seperatorTo = to;
+		this.mSeperatorResId = layoutId;
+		this.mSeperatorFrom = from;
+		this.mSeperatorTo = to;
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @return
 	 */
 	public boolean isItemResourceSet() {
-		return this.itemResId != -1 && this.itemFrom != null && this.itemTo != null;
+		return this.mItemResId != -1 && this.mItemFrom != null && this.mItemTo != null;
 	}
 
 	/**
@@ -271,9 +271,9 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 * @param to
 	 */
 	public void setItemResource(int layoutId, String[] from, int[] to) {
-		this.itemResId = layoutId;
-		this.itemFrom = from;
-		this.itemTo = to;
+		this.mItemResId = layoutId;
+		this.mItemFrom = from;
+		this.mItemTo = to;
 	}
 
 	/**
@@ -429,13 +429,13 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		// build the adapter.
 		return new SimpleSeperatorAdapter(
 				this,
-				buildItemsHashList(baseItem.getItems(itemsMap)),
-				this.itemResId,
-				this.itemFrom,
-				this.itemTo,
-				this.seperatorResId,
-				this.seperatorFrom,
-				this.seperatorTo
+				buildItemsHashList(baseItem.getItems(mItemsMap)),
+				this.mItemResId,
+				this.mItemFrom,
+				this.mItemTo,
+				this.mSeperatorResId,
+				this.mSeperatorFrom,
+				this.mSeperatorTo
 		);
 	}
 
@@ -443,17 +443,17 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		// build the adapter.
 		ArrayList<HashMap<String,Object>> items = new ArrayList<HashMap<String,Object>>();
 
-		ArrayList<Item> children = baseItem.getItems(itemsMap);
+		ArrayList<Item> children = baseItem.getItems(mItemsMap);
 		for(int i = 0; i < children.size(); ++i) {
 			Item item = children.get(i);
 
 			// add the header item.
-			if(item.hasItems(this.itemsMap)) {
+			if(item.hasItems(this.mItemsMap)) {
 				HashMap<String,Object> hashItem = item.buildHashItem();
 				hashItem.put(SimpleSeperatorAdapter.IS_SEPERATOR_ITEM_KEY, true);
 				hashItem.put(SimpleSeperatorAdapter.IS_ENABLED_ITEM_KEY, false);
 				items.add(hashItem);
-				items.addAll(buildItemsHashList(item.getItems(this.itemsMap)));
+				items.addAll(buildItemsHashList(item.getItems(this.mItemsMap)));
 			} else {
 				items.add(item.buildHashItem());
 			}
@@ -462,12 +462,12 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		return new SimpleSeperatorAdapter(
 				this,
 				items,
-				this.itemResId,
-				this.itemFrom,
-				this.itemTo,
-				this.seperatorResId,
-				this.seperatorFrom,
-				this.seperatorTo
+				this.mItemResId,
+				this.mItemFrom,
+				this.mItemTo,
+				this.mSeperatorResId,
+				this.mSeperatorFrom,
+				this.mSeperatorTo
 		);
 	}
 
@@ -485,7 +485,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		BaseAdapter adapter = (BaseAdapter)arg0.getAdapter();
 		HashMap<String,Object> itemMap = (HashMap<String, Object>) adapter.getItem(arg2);
 		String id = (String) itemMap.get(LIST_ITEM_ID);
-		onItemClick(itemsMap.get(id));
+		onItemClick(mItemsMap.get(id));
 	}
 
 	public void onItemClick(Item item) {
@@ -494,12 +494,12 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			intent.setData(item.destUri);
 			startActivity(intent);
 
-		} else if(item.hasItems(this.itemsMap)) {
+		} else if(item.hasItems(this.mItemsMap)) {
 			Intent intent = new Intent(this, this.getClass());
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_XML_RESOURCE, this.xmlResource);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_XML_RESOURCE, this.mXmlResource);
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_START_ID, item.id);
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_SEPARATOR_RES_ID, this.seperatorResId);
-			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_ITEM_RES_ID, this.itemResId);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_SEPARATOR_RES_ID, this.mSeperatorResId);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_ITEM_RES_ID, this.mItemResId);
 			this.startActivity(intent);
 			
 		} else if(item.hasContent()){

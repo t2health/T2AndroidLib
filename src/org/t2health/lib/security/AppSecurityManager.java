@@ -6,50 +6,50 @@ import android.content.Intent;
 public class AppSecurityManager {
 	public static final int UNLOCK_ACTIVITY = 9834;
 	
-	private static boolean isUnlocked = false;
-	private static int statusCount = 0;
-	private static boolean appHasFocus = false;
+	private static boolean sIsUnlocked = false;
+	private static int sStatusCount = 0;
+	private static boolean sAppHasFocus = false;
 	
 	public static void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(requestCode == UNLOCK_ACTIVITY && resultCode == Activity.RESULT_OK) {
-			isUnlocked = true;
+			sIsUnlocked = true;
 		}
 	}
 
 	public static void onWindowFocusChanged(boolean hasFocus) {
-		appHasFocus = hasFocus;
+		sAppHasFocus = hasFocus;
 		
 		if(hasFocus) {
-			++statusCount;
+			++sStatusCount;
 		} else {
-			--statusCount;
+			--sStatusCount;
 		}
 		
 		// If the app was completley shut off, force the unlock screen.
-		if(statusCount == 0) {
-			isUnlocked = false;
+		if(sStatusCount == 0) {
+			sIsUnlocked = false;
 		}
 	}
 	
 	public static void onResume() {
-		++statusCount;
+		++sStatusCount;
 	}
 
 	public static void onPause() {
 		// An app has come over the top of this app. Lock the app.
-		if(statusCount == 1 && !appHasFocus) {
-			isUnlocked = false;
+		if(sStatusCount == 1 && !sAppHasFocus) {
+			sIsUnlocked = false;
 		}
 		
-		--statusCount;
+		--sStatusCount;
 	}
 	
 	public static void setIsUnlocked(boolean b) {
-		isUnlocked = b;
+		sIsUnlocked = b;
 	}
 	
 	public static boolean isUnlocked() {
-		return isUnlocked;
+		return sIsUnlocked;
 	}
 	
 	public static void startUnlockActivity(Activity a, Intent i) {

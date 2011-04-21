@@ -10,14 +10,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public abstract class BasePreferenceSecurityActivity extends BasePreferenceActivity {
-	private boolean isEnabled = false;
+	private boolean mIsEnabled = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		// configure the security manager.
-		this.isEnabled = ManifestMetaData.SecurityManager.isEnabled(this) && 
+		this.mIsEnabled = ManifestMetaData.SecurityManager.isEnabled(this) && 
 							this.isSecurityEnabled() &&
 							SharedPref.Security.isEnabled(this);
 	}
@@ -44,7 +44,7 @@ public abstract class BasePreferenceSecurityActivity extends BasePreferenceActiv
 
 	@Override
 	protected void onResume() {
-		if(!AppSecurityManager.isUnlocked() && this.isEnabled) {
+		if(!AppSecurityManager.isUnlocked() && this.mIsEnabled) {
 			AppSecurityManager.startUnlockActivity(this, getSecurityUnlockIntent());
 		}
 		

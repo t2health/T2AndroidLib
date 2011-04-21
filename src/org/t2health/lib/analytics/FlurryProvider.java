@@ -10,13 +10,13 @@ import android.os.Bundle;
 
 class FlurryProvider implements AnalyticsProvider {
 
-	private String apiKey;
-	private Class<?> anlyticsClass;
+	private String mApiKey;
+	private Class<?> mAnalyticsClass;
 
 	@Override
 	public void init() {
 		try {
-			this.anlyticsClass = java.lang.Class.forName("com.flurry.android.FlurryAgent");
+			this.mAnalyticsClass = java.lang.Class.forName("com.flurry.android.FlurryAgent");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -24,7 +24,7 @@ class FlurryProvider implements AnalyticsProvider {
 	
 	@Override
 	public void setApiKey(String key) {
-		this.apiKey = key;
+		this.mApiKey = key;
 	}
 
 	@Override
@@ -34,13 +34,13 @@ class FlurryProvider implements AnalyticsProvider {
 
 	@Override
 	public void onStartSession(Context context) {
-		if(anlyticsClass == null) {
+		if(mAnalyticsClass == null) {
 			return;
 		}
 		
 		try {
-			Method m = anlyticsClass.getDeclaredMethod("onStartSession", Context.class, String.class);
-			m.invoke(null, context, this.apiKey);
+			Method m = mAnalyticsClass.getDeclaredMethod("onStartSession", Context.class, String.class);
+			m.invoke(null, context, this.mApiKey);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -61,12 +61,12 @@ class FlurryProvider implements AnalyticsProvider {
 
 	@Override
 	public void onEndSession(Context context) {
-		if(anlyticsClass == null) {
+		if(mAnalyticsClass == null) {
 			return;
 		}
 		
 		try {
-			Method m = anlyticsClass.getDeclaredMethod("onEndSession", Context.class);
+			Method m = mAnalyticsClass.getDeclaredMethod("onEndSession", Context.class);
 			m.invoke(null, context);
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -103,12 +103,12 @@ class FlurryProvider implements AnalyticsProvider {
 
 	@Override
 	public void onEvent(String event) {
-		if(anlyticsClass == null) {
+		if(mAnalyticsClass == null) {
 			return;
 		}
 		
 		try {
-			Method m = anlyticsClass.getDeclaredMethod("onEvent", String.class);
+			Method m = mAnalyticsClass.getDeclaredMethod("onEvent", String.class);
 			m.invoke(null, event);
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -126,12 +126,12 @@ class FlurryProvider implements AnalyticsProvider {
 
 	@Override
 	public void onEvent(String event, Map<String, String> parameters) {
-		if(anlyticsClass == null) {
+		if(mAnalyticsClass == null) {
 			return;
 		}
 		
 		try {
-			Method m = anlyticsClass.getDeclaredMethod("onEvent", Map.class);
+			Method m = mAnalyticsClass.getDeclaredMethod("onEvent", Map.class);
 			m.invoke(null, parameters);
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -149,12 +149,12 @@ class FlurryProvider implements AnalyticsProvider {
 
 	@Override
 	public void onPageView() {
-		if(anlyticsClass == null) {
+		if(mAnalyticsClass == null) {
 			return;
 		}
 		
 		try {
-			Method m = anlyticsClass.getDeclaredMethod("onPageView");
+			Method m = mAnalyticsClass.getDeclaredMethod("onPageView");
 			m.invoke(null);
 		} catch (SecurityException e) {
 			e.printStackTrace();

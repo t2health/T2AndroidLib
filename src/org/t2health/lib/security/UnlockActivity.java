@@ -16,7 +16,7 @@ import android.widget.EditText;
 
 public class UnlockActivity extends BaseNavigationActivity implements OnKeyListener, OnClickListener {
 	private static final int FORGOT_PIN_ACTIVITY = 235;
-	private EditText pinEditText;
+	private EditText mPinEditText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,8 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 		
 		this.setContentView(R.layout.security_unlock_activity);
 		this.setTitle(R.string.security_unlock_title);
-		pinEditText = (EditText)this.findViewById(R.id.passwordEditText);
-		pinEditText.setOnKeyListener(this);
+		mPinEditText = (EditText)this.findViewById(R.id.passwordEditText);
+		mPinEditText.setOnKeyListener(this);
 		
 		this.findViewById(R.id.forgotPasswordButton).setOnClickListener(this);
 	}
@@ -61,7 +61,7 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		if(v.getId() == R.id.passwordEditText) {
-			String enteredPin = pinEditText.getText().toString().trim();
+			String enteredPin = mPinEditText.getText().toString().trim();
 			if(SharedPref.Security.doesPasswordMatch(this, enteredPin)) {
 				AppSecurityManager.setIsUnlocked(true);
 				this.setResult(RESULT_OK);
