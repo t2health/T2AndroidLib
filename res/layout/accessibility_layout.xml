@@ -19,7 +19,7 @@
 		android:text="Test Message: Accessibility is Enabled!" />
 	
 	<view
-		class="org.t2health.lib.accessibility.TouchLayer"
+		class="org.t2health.lib.accessibility.ActivityTouchLayer"
 		android:id="@+id/accessibilityTouchLayer"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
