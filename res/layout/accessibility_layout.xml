@@ -4,11 +4,13 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	
-	<FrameLayout
+	<view
+		class="org.t2health.lib.accessibility.ActivityTouchFrame"
 		android:id="@+id/accessibilityActivityContent"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-	</FrameLayout>
+		android:layout_height="fill_parent"
+		android:background="#0000FF00">
+	</view>
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -17,10 +19,4 @@
 		android:textSize="10sp"
 		android:textColor="#FFFF0000"
 		android:text="Test Message: Accessibility is Enabled!" />
-	
-	<view
-		class="org.t2health.lib.accessibility.ActivityTouchLayer"
-		android:id="@+id/accessibilityTouchLayer"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent" />
 </FrameLayout>

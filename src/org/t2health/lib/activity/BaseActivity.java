@@ -5,14 +5,17 @@ import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.accessibility.Accessibility;
+import org.t2health.lib.accessibility.ActivityTouchFrame;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.DatabaseOpenHelper;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
