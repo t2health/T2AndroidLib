@@ -15,10 +15,23 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This is a helper class that will make certain inaccessible android
+ * objects accessible.
+ * @author robbiev
+ *
+ */
 public class Accessibility {
 	private static final String SPACE = " ";
 	private static String TOAST_PREFIX = null;
 	
+	/**
+	 * Show a dialog. Without this method, the dialog is shown but the soft 
+	 * input method gets covered up. Using this method, the dialog will
+	 * still be shown and the soft navigation input method will still operate
+	 * as expected.
+	 * @param d
+	 */
 	public static void show(Dialog d) {
 		d.show();
 		
@@ -28,6 +41,10 @@ public class Accessibility {
 		d.getWindow().setAttributes(p);
 	}
 	
+	/**
+	 * Shows and speaks the text of a toast notification.
+	 * @param t
+	 */
 	public static void show(Toast t) {
 		t.show();
 		
