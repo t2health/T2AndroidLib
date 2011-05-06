@@ -1,4 +1,4 @@
-package org.t2health.lib.activity.util;
+package org.t2health.lib.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.t2health.lib.activity.BaseNavigationActivity;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -94,7 +93,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 	protected static final String LIST_ITEM_TITLE = "title";
 	protected static final String LIST_ITEM_ID = "id";
-	private static final String TAG = XMLItemsBrowserActivity.class.getSimpleName();
+	//private static final String TAG = XMLItemsBrowserActivity.class.getSimpleName();
 
 	private int mXmlResource = -1;
 
@@ -157,7 +156,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		if(baseItem == null) {
 			return;
 		}
-
+		
 		if(baseItem.hasItems(this.mItemsMap)) {
 			ListView listView = new ListView(this);
 			listView.setScrollingCacheEnabled(false);
@@ -198,16 +197,6 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 */
 	protected int getItemLayoutResId() {
 		return android.R.layout.simple_list_item_1;
-	}
-
-	private ArrayList<Item> getBaseItems(LinkedHashMap<String,Item> items) {
-		ArrayList<Item> baseItems = new ArrayList<Item>();
-		for(Item item: items.values()) {
-			if(item.parentId == null || items.get(item.parentId) == null) {
-				baseItems.add(item);
-			}
-		}
-		return baseItems;
 	}
 
 	/**
@@ -483,6 +472,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	@Override
 	public final void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		BaseAdapter adapter = (BaseAdapter)arg0.getAdapter();
+		@SuppressWarnings("unchecked")
 		HashMap<String,Object> itemMap = (HashMap<String, Object>) adapter.getItem(arg2);
 		String id = (String) itemMap.get(LIST_ITEM_ID);
 		onItemClick(mItemsMap.get(id));
@@ -604,6 +594,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			@SuppressWarnings("unchecked")
 			HashMap<String,Object> item = (HashMap<String, Object>) this.getItem(position);
 
 			if(isSeperator(item)) {
@@ -614,11 +605,6 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			}
 
 			return super.getView(position, null, parent);
-		}
-
-		private boolean isSeperator(int pos) {
-			HashMap<String,Object> item = (HashMap<String, Object>) this.getItem(pos);
-			return isSeperator(item);
 		}
 
 		private boolean isSeperator(HashMap<String,Object> item) {
@@ -646,6 +632,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			return false;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public boolean isEnabled(int position) {
 			return isEnabled((HashMap<String, Object>) this.getItem(position));

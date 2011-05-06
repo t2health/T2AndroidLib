@@ -6,6 +6,10 @@
 	<string name="yes">Yes</string>
 	<string name="no">No</string>
 
+	<string name="navigation_title_desc">Title</string>
+	<string name="navigation_right_button_desc"></string>
+	<string name="navigation_left_button_desc"></string>
+
 	<!-- Accessibility -->
 	<string name="accessibility_toast_prefix">Toast Notification: </string>
 

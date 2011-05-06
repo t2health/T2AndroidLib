@@ -38,7 +38,7 @@ public abstract class BaseQAManagerActivity extends BaseNavigationActivity {
 	private static final String XML_ATTR_VALUE = "value";
 	private static final String XML_ATTR_ANSWER_IDS = "answerIds";
 	
-	private static final String TAG = BaseQAManagerActivity.class.getSimpleName();
+	//private static final String TAG = BaseQAManagerActivity.class.getSimpleName();
 	private Questionare questionare = new Questionare();
 	private LinkedHashMap<String,Question> questions = new LinkedHashMap<String,Question>();
 	private LinkedHashMap<String,Answer> answers = new LinkedHashMap<String,Answer>();

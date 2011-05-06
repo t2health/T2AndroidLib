@@ -94,9 +94,10 @@ public class ManifestSqliteOpenHelperFactory implements OpenHelperManager.Sqlite
 		
 		boolean returnValue = false;
 		String helperClassPath = ManifestMetaData.Database.getOpenHelper(c);
-		Class<? extends DatabaseOpenHelper> dbHelperClass;
+		
+		// try to load the database helper class.
 		try {
-			dbHelperClass = (Class<? extends DatabaseOpenHelper>) Class.forName(helperClassPath);
+			Class<? extends DatabaseOpenHelper> dbHelperClass = (Class<? extends DatabaseOpenHelper>) Class.forName(helperClassPath);
 			returnValue = true;
 		} catch (Exception e) {
 			returnValue = false;

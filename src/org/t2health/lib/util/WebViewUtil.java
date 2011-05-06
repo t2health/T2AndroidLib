@@ -3,6 +3,7 @@ package org.t2health.lib.util;
 import android.app.Activity;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ public class WebViewUtil {
 	 * @param contentString
 	 * @param textColor
 	 */
-	public static void formatWebView(Activity c, WebView wv, String contentString, int textColor) {
+	public static void formatWebViewText(Activity c, WebView wv, String contentString, int textColor) {
 		if(contentString == null) {
 			contentString = "<span></span>";
 		}
@@ -48,12 +49,13 @@ public class WebViewUtil {
 		contentBuffer.append("</style>");
 		contentBuffer.append(contentString);
 
+		wv.setWebChromeClient(new WebChromeClient());
+		wv.setBackgroundColor(Color.TRANSPARENT); // make the bg transparent
+		
 		WebSettings settings = wv.getSettings();
 		settings.setDefaultFontSize(webViewFontSizePoints);
 		settings.setDefaultFixedFontSize(webViewFontSizePoints);
-		settings.setJavaScriptEnabled(true);
-
-		wv.setBackgroundColor(Color.TRANSPARENT); // make the bg transparent
+		
 		wv.loadDataWithBaseURL("fake:/blah", contentBuffer.toString(), "text/html", "utf-8", null);
 	}
 }

@@ -24,6 +24,8 @@ import com.nullwire.trace.ExceptionHandler;
  * @author robbiev
  */
 public abstract class BaseActivity extends OrmLiteBaseActivity<DatabaseOpenHelper> {
+	private boolean isORMConfigured = false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,7 +39,8 @@ public abstract class BaseActivity extends OrmLiteBaseActivity<DatabaseOpenHelpe
         }
         
 		// configure the database.
-        if(ManifestMetaData.Database.isConfigured(this) && ManifestSqliteOpenHelperFactory.isClassesConfigured(this)) {
+        isORMConfigured = ManifestMetaData.Database.isConfigured(this) && ManifestSqliteOpenHelperFactory.isClassesConfigured(this);
+        if(isORMConfigured) {
 			OpenHelperManager.setOpenHelperFactory(
 					ManifestSqliteOpenHelperFactory.getInstance()
 			);
@@ -86,6 +89,15 @@ public abstract class BaseActivity extends OrmLiteBaseActivity<DatabaseOpenHelpe
 		}
 		
 		return text;
+	}
+
+	@Override
+	public synchronized DatabaseOpenHelper getHelper() {
+		if(isORMConfigured) {
+			return super.getHelper();
+		}
+		
+		throw new RuntimeException("The ORM has not been properly configured. Look at the Library's AndroidManifest.xml file for setup instructions.");
 	}
 	
 	@Override

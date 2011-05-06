@@ -33,7 +33,6 @@ public class RecordService extends Service {
 
 	private boolean isMarking = false;
 	private boolean isRecording = false;
-	private long markStartTime;
 	private MediaRecorder recorder;
 	private ServiceRecording currentRecording;
 	private OnActionListener onActionListener;

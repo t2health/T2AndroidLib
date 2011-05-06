@@ -28,8 +28,6 @@ public class ManifestMetaData {
 	
 	private static final String SECURITY_ENABLED = "securityEnabled";
 	
-	private static final String ACCESSIBILITY_ENABLED = "accessibilityEnabled";
-	
 	private static final String DEBUG_MODE = "debugMode";
 	
 	private static Bundle sApplicationMetaData;
@@ -305,22 +303,6 @@ public class ManifestMetaData {
 		 */
 		public static boolean isEnabled(Context c) {
 			return getBoolean(c, SECURITY_ENABLED);
-		}
-	}
-	
-	/**
-	 * Accessibility related settings.
-	 * @author robbiev
-	 *
-	 */
-	public static class Accessibility {
-		/**
-		 * Returns true if accessability has been enabled via the manifest file.
-		 * @param c
-		 * @return
-		 */
-		public static boolean isEnabled(Context c) {
-			return getBoolean(c, ACCESSIBILITY_ENABLED);
 		}
 	}
 }

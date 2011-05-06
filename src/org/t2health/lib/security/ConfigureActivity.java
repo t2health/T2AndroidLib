@@ -25,7 +25,6 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 	private EditText mAnswer1EditText;
 	private EditText mQuestion2EditText;
 	private EditText mAnswer2EditText;
-	private boolean mChangesMade = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -75,8 +74,6 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 		setRightNavigationButtonText(R.string.save);
 		setRightNavigationButtonVisibility(View.VISIBLE);
 		setLeftNavigationButtonText(R.string.cancel);
-		
-		this.mChangesMade = false;
 		
 		// Hide the keyboard unless the user chooses a text view.
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -149,14 +146,12 @@ public class ConfigureActivity extends BaseNavigationActivity implements OnCheck
 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		this.mChangesMade = true;
 		setFieldsEnabled(isChecked);
 		setRightNavigationButtonEnabled(validSecurityDataEntererd());
 	}
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
-		this.mChangesMade = true;
 		this.setRightNavigationButtonEnabled(validSecurityDataEntererd());
 		return false;
 	}

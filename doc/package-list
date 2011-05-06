@@ -21,11 +21,12 @@ org.achartengine.renderer
 org.achartengine.tools
 org.achartengine.util
 org.t2health.lib
+org.t2health.lib.accessibility
 org.t2health.lib.activity
-org.t2health.lib.activity.util
 org.t2health.lib.analytics
 org.t2health.lib.bluetooth
 org.t2health.lib.db
+org.t2health.lib.media
 org.t2health.lib.preference
 org.t2health.lib.security
 org.t2health.lib.util

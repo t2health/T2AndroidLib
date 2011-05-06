@@ -21,7 +21,8 @@
 				android:id="@+id/navigationLeftButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="5dip" />
+				android:layout_marginRight="5dip"
+				android:contentDescription="@string/navigation_left_button_desc" />
 	
 			<TextView
 				android:id="@+id/navigationTitle"
@@ -31,13 +32,17 @@
 				style="@android:style/TextAppearance.Medium"
 				android:text=""
 				android:maxLines="2"
-				android:ellipsize="end" />
+				android:ellipsize="end"
+				android:focusable="true"
+				android:focusableInTouchMode="false"
+				android:contentDescription="@string/navigation_title_desc" />
 	
 			<Button
 				android:id="@+id/navigationRightButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="5dip" />
+				android:layout_marginLeft="5dip"
+				android:contentDescription="@string/navigation_right_button_desc" />
 		</LinearLayout>
 	</LinearLayout>
 

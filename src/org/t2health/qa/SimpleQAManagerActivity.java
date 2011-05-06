@@ -1,7 +1,7 @@
 package org.t2health.qa;
 
 import org.t2health.lib.R;
-import org.t2health.lib.activity.util.WebViewActivity;
+import org.t2health.lib.activity.WebViewActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

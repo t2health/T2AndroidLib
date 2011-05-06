@@ -4,9 +4,50 @@
       android:versionCode="1"
       android:versionName="1.0">
     <application>
+		<!-- 
+			Configure the ORM 
+			The class for the databaseOpenHelper is a subclass of 
+			org.t2health.lib.db.DatabaseOpenHelper and will handle the 
+			create/update of your database tables. This class has to exist 
+			or the ORM will not initialize.
+		-->
+		<meta-data android:name="databaseName" android:value="test.db" />
+		<meta-data android:name="databaseVersion" android:value="1" />
+		<meta-data android:name="databaseOpenHelper" android:value="org.t2health.lib.test.MyDBOpenHelper" />
 
+		<!-- 
+			Turn on password protection 
+			You need to add the password protection activities to the
+			manifest so they can be run. 
+		-->
+		<meta-data android:name="securityEnabled" android:value="true" />
+		<activity android:name="org.t2health.lib.security.UnlockActivity" />
+        <activity android:name="org.t2health.lib.security.ForgotPasswordActivity" />
+        <activity android:name="org.t2health.lib.security.ConfigureActivity" />
+
+		<!-- 
+			Turn on remote stack traces 
+			Any exceptions that get thrown will be sent to this URL. Look in
+			the docs/source folder of the this library project for an example of
+			what the remote script should handle.
+		-->
+		<meta-data android:name="remoteStackTraceEnabled" android:value="true" />
+		<meta-data android:name="stackTraceURL" android:value="http://www2.tee2.org/trace/report.php" />
+
+		<!-- 
+			Configure accessibility (specifically for webviews) 
+			Providers for webview accessibility the authorities should begin
+			with your app's package name. A unique authorities attribute is 
+			important as it is unique to the andorid system. Any apps with the same
+			authority attribute will not be installed by the system. 
+			
+			So make the authorities something unique to the system. The library
+			code will figure out what you set it as and configure the webview 
+			accessibility accordingly.
+		-->
+		<provider android:name="org.t2health.lib.accessibility.TtsContentProvider"
+			android:authorities="org.t2health.lib.accessibility.TtsContentProvider" />
 
     </application>
-    <uses-sdk android:minSdkVersion="4" />
-
+    <uses-sdk android:minSdkVersion="5" />
 </manifest> 

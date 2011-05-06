@@ -1,8 +1,7 @@
-package org.t2health.lib.activity.util;
+package org.t2health.lib.activity;
 
 
 import org.t2health.lib.R;
-import org.t2health.lib.activity.BaseNavigationActivity;
 import org.t2health.lib.util.WebViewUtil;
 
 import android.graphics.Color;
@@ -31,12 +30,12 @@ public class WebViewActivity extends BaseNavigationActivity {
 			return;
 		}
 
-		this.setContentView(R.layout.webview_layout);
+		this.setContentView(R.layout.webview_activity);
 
 		WebView wv = (WebView)this.findViewById(R.id.webview);
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-		WebViewUtil.formatWebView(this, wv, contentString, Color.WHITE);
+		WebViewUtil.formatWebViewText(this, wv, contentString, Color.WHITE);
 	}
 }

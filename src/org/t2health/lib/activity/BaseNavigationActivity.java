@@ -184,6 +184,7 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
+		super.setTitle(title);
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(title);
 	}
 
@@ -192,6 +193,7 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
+		super.setTitle(titleId);
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(titleId);
 	}
 
