@@ -43,8 +43,7 @@ function IDEAL_TTS_Speak(messageString, queueMode, params){
   if (queueMode == 1){
     queueModeStr = "/1/";
   }
-  //speechNode.src = "content://com.ideal.webaccess.tts" + queueModeStr + new Date().getTime() + "/" + messageString;
-  speechNode.src = IDEAL_URI_PREFIX + queueModeStr + new Date().getTime() + "/" + messageString;
+  speechNode.src = "content://com.ideal.webaccess.tts" + queueModeStr + new Date().getTime() + "/" + messageString;
   document.body.appendChild(speechNode);
 }
 

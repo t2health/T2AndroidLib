@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.nullwire.trace.ExceptionHandler;
 
 /**
@@ -20,7 +21,7 @@ import com.nullwire.trace.ExceptionHandler;
  * Remote Stack Trace and other code.
  * @author robbiev
  */
-public abstract class BaseListActivity extends OrmLiteBaseActivity<DatabaseOpenHelper> {
+public abstract class BaseListActivity extends OrmLiteBaseListActivity<DatabaseOpenHelper> {
 	private boolean isORMConfigured = false;
 	
 	@Override

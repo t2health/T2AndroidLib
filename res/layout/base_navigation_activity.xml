@@ -34,7 +34,7 @@
 				android:maxLines="2"
 				android:ellipsize="end"
 				android:focusable="true"
-				android:focusableInTouchMode="false"
+				android:focusableInTouchMode="true"
 				android:contentDescription="@string/navigation_title_desc" />
 	
 			<Button

@@ -1,4 +1,4 @@
-package org.t2health.qa;
+package org.t2health.lib.qa;
 /**
  * A questionare object to hold the basic data parsed from the XML file.
  * @author robbiev

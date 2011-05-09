@@ -11,6 +11,7 @@
 	<string name="navigation_left_button_desc"></string>
 
 	<!-- Accessibility -->
+	<string name="accessibility_tab">Tab: </string>
 	<string name="accessibility_toast_prefix">Toast Notification: </string>
 
 	<!-- Security -->

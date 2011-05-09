@@ -143,7 +143,7 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 		this.findViewById(R.id.navigationLeftButton).setOnClickListener(mNavItemEventListener);
 		this.findViewById(R.id.navigationRightButton).setOnClickListener(mNavItemEventListener);
 	}
-	
+
 	@Override
 	public void setContentView(int layoutResID) {
 		View baseLayout = getLayoutInflater().inflate(R.layout.base_navigation_activity, null);

@@ -1,4 +1,4 @@
-package org.t2health.qa;
+package org.t2health.lib.qa;
 
 
 import org.t2health.lib.R;

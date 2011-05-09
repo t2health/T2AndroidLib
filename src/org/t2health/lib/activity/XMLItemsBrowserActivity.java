@@ -635,7 +635,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		@SuppressWarnings("unchecked")
 		@Override
 		public boolean isEnabled(int position) {
-			return isEnabled((HashMap<String, Object>) this.getItem(position));
+			return true;
+			//return isEnabled((HashMap<String, Object>) this.getItem(position));
 		}
 	}
 }

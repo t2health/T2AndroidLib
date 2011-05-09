@@ -2,16 +2,34 @@ package org.t2health.lib.activity;
 
 
 import org.t2health.lib.ManifestMetaData;
+import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.DatabaseOpenHelper;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
+import android.app.Activity;
+import android.app.LocalActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
+import android.widget.FrameLayout;
+import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.android.apptools.OrmLiteBaseTabActivity;
 import com.nullwire.trace.ExceptionHandler;
 
 /**
@@ -20,7 +38,7 @@ import com.nullwire.trace.ExceptionHandler;
  * Remote Stack Trace and other code.
  * @author robbiev
  */
-public abstract class BaseTabActivity extends OrmLiteBaseActivity<DatabaseOpenHelper> {
+public abstract class BaseTabActivity extends OrmLiteBaseTabActivity<DatabaseOpenHelper> {
 	private boolean isORMConfigured = false;
 	
 	@Override

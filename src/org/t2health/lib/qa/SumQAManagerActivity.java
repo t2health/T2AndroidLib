@@ -1,4 +1,4 @@
-package org.t2health.qa;
+package org.t2health.lib.qa;
 
 /**
  * A QA Manager that will sum the values of all the answers selected.

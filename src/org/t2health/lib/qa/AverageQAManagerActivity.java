@@ -1,4 +1,4 @@
-package org.t2health.qa;
+package org.t2health.lib.qa;
 
 import java.util.LinkedHashMap;
 

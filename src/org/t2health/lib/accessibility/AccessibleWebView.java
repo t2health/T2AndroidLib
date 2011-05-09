@@ -3,21 +3,28 @@ package org.t2health.lib.accessibility;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.t2health.lib.R;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 /**
  * A WebView that is designed to read its contents. In order to get the screen
@@ -31,12 +38,16 @@ import android.webkit.WebView;
  *
  */
 public class AccessibleWebView extends WebView {
+	private static final String TAG = AccessibleWebView.class.getSimpleName();
+	
 	private static final int WHAT_START_DOCUMENT_REACHED = 0;
 	private static final int WHAT_END_DOCUMENT_REACHED = 1;
 	
 	private AccessibilityManager aManager;
 	private JSInterface jsInterface;
 	private JSInterfaceHandler jsInterfaceHandler;
+	//private TextToSpeech tts;
+	//private boolean ttsInitSuccess = false; 
 	
 	public AccessibleWebView(Context context) {
 		super(context);
@@ -61,6 +72,7 @@ public class AccessibleWebView extends WebView {
 		jsInterface = new JSInterface();
 		jsInterfaceHandler = new JSInterfaceHandler();
 		
+		this.setWebViewClient(new AccessiblieWebViewClient());
 		this.setWebChromeClient(new WebChromeClient());
 		this.setBackgroundColor(Color.TRANSPARENT); // make the bg transparent
 		
@@ -76,7 +88,7 @@ public class AccessibleWebView extends WebView {
 		StringBuffer sb = new StringBuffer();
 		
 		// add the TTS code to the HTML if everything is configured well.
-		if(aManager.isEnabled() && TtsContentProvider.isConfigured()) {
+		if(aManager.isEnabled()) {
 			appendJS(sb);
 		}
 		
@@ -90,7 +102,7 @@ public class AccessibleWebView extends WebView {
 		StringBuffer sb = new StringBuffer();
 		
 		// add the TTS code to the HTML if everything is configured well.
-		if(aManager.isEnabled() && TtsContentProvider.isConfigured()) {
+		if(aManager.isEnabled()) {
 			appendJS(sb);
 		}
 		
@@ -105,7 +117,6 @@ public class AccessibleWebView extends WebView {
 	 */
 	private void appendJS(StringBuffer sb) {
 		sb.append("<script type=\"text/javascript\">\n");
-		sb.append("var IDEAL_URI_PREFIX = '"+ TtsContentProvider.getURIPrefix() +"';\n");
 		try {
 			BufferedReader is = new BufferedReader(new InputStreamReader(this.getContext().getResources().openRawResource(R.raw.ideal_tts_aggregated)));
 			String line = null;
@@ -118,16 +129,35 @@ public class AccessibleWebView extends WebView {
 		}
 		sb.append("</script>\n");
 	}
+	
+	private boolean shiftFocus(int direction) {
+		View v = focusSearch(direction);
+		if(v != null) {
+			return v.requestFocus();
+		}
+		return false;
+	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(aManager.isEnabled()) {
 			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 				return super.onKeyDown(KeyEvent.KEYCODE_P, changeKeyCode(event, KeyEvent.KEYCODE_P));
+				
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				return super.onKeyDown(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
-			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-				return false;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+				if(!shiftFocus(View.FOCUS_RIGHT)) {
+					shiftFocus(View.FOCUS_DOWN);
+				}
+				return true;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+				if(!shiftFocus(View.FOCUS_LEFT)) {
+					shiftFocus(View.FOCUS_UP);
+				}
+				return true;
 			}
 		}
 		
@@ -139,10 +169,21 @@ public class AccessibleWebView extends WebView {
 		if(aManager.isEnabled()) {
 			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 				return super.onKeyUp(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
+				
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
 				return super.onKeyUp(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
-			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-				return false;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+				if(!shiftFocus(View.FOCUS_RIGHT)) {
+					shiftFocus(View.FOCUS_DOWN);
+				}
+				return true;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+				if(!shiftFocus(View.FOCUS_LEFT)) {
+					shiftFocus(View.FOCUS_UP);
+				}
+				return true;
 			}
 		}
 		
@@ -161,6 +202,18 @@ public class AccessibleWebView extends WebView {
 				base.getScanCode(),
 				base.getFlags()
 		);
+	}
+	
+	private void speakText(String text, int queueMode) {
+		if(aManager.isEnabled()) {
+			queueMode = TextToSpeech.QUEUE_ADD;
+			AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+			event.setPackageName(this.getClass().getPackage().toString());
+			event.setClassName(this.getClass().getSimpleName());
+			event.setContentDescription(text);
+			event.setEventTime(System.currentTimeMillis());
+			aManager.sendAccessibilityEvent(event);
+		}
 	}
 	
 	/**
@@ -185,17 +238,46 @@ public class AccessibleWebView extends WebView {
 			switch(msg.what) {
 				// we are at the start of the doc, shift focus to the view above.
 				case WHAT_START_DOCUMENT_REACHED:
-					if((tmpView = focusSearch(FOCUS_UP)) != null) {
-						tmpView.requestFocus();
+					if(!shiftFocus(FOCUS_UP)) {
+						shiftFocus(FOCUS_LEFT);
 					}
 					break;
 					// we are at the start of the doc, shift focus to the view below.	
 				case WHAT_END_DOCUMENT_REACHED:
-					if((tmpView = focusSearch(FOCUS_DOWN)) != null) {
-						tmpView.requestFocus();
+					if(!shiftFocus(FOCUS_DOWN)) {
+						shiftFocus(FOCUS_RIGHT);
 					}
 					break;
 			}
+		}
+	}
+	
+	private class AccessiblieWebViewClient extends WebViewClient {
+		@Override
+		public void onLoadResource(WebView view, String url) {
+			Uri uri = Uri.parse(url);
+			List<String> segments = uri.getPathSegments();
+			
+			if(uri.getScheme().equals("content") && uri.getHost().equals("com.ideal.webaccess.tts") && segments.size() > 2) {
+				String modeStr = segments.get(0);
+				String date = segments.get(1);
+				StringBuffer message = new StringBuffer(segments.get(2));
+				for(int i = 3; i < segments.size(); ++i) {
+					message.append("/");
+					message.append(segments.get(i));
+				}
+				
+				int mode = TextToSpeech.QUEUE_FLUSH;
+				if(modeStr.startsWith("1")) {
+					mode = TextToSpeech.QUEUE_ADD;
+				}
+				
+				speakText(message.toString(), mode);
+				
+				return;
+			}
+			
+			super.onLoadResource(view, url);
 		}
 	}
 }

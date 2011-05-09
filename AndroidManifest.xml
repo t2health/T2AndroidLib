@@ -33,21 +33,6 @@
 		-->
 		<meta-data android:name="remoteStackTraceEnabled" android:value="true" />
 		<meta-data android:name="stackTraceURL" android:value="http://www2.tee2.org/trace/report.php" />
-
-		<!-- 
-			Configure accessibility (specifically for webviews) 
-			Providers for webview accessibility the authorities should begin
-			with your app's package name. A unique authorities attribute is 
-			important as it is unique to the andorid system. Any apps with the same
-			authority attribute will not be installed by the system. 
-			
-			So make the authorities something unique to the system. The library
-			code will figure out what you set it as and configure the webview 
-			accessibility accordingly.
-		-->
-		<provider android:name="org.t2health.lib.accessibility.TtsContentProvider"
-			android:authorities="org.t2health.lib.accessibility.TtsContentProvider" />
-
     </application>
     <uses-sdk android:minSdkVersion="5" />
 </manifest> 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<public type="attr" name="layout_x" id="0x01010000" />
+	<public type="attr" name="layout_y" id="0x01010001" />
+	<public type="attr" name="text" id="0x01010002" />
+	<public type="attr" name="src" id="0x01010003" />
+	<public type="attr" name="imagePosition" id="0x01010004" />
+</resources>
