@@ -17,6 +17,7 @@
 package org.t2health.lib.util;
 
 import org.t2health.lib.R;
+import org.t2health.lib.accessibility.Accessibility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -80,7 +81,7 @@ public class Eula {
                 }
             });
             builder.setMessage(readEula(activity));
-            builder.create().show();
+            Accessibility.show(builder.create());
             return false;
         }
         return true;

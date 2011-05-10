@@ -16,22 +16,22 @@ public abstract class BaseQAQuestionActivity extends BaseNavigationActivity {
 	 * The Question object
 	 */
 	public static final String EXTRA_QUESTION = "questionObject";
-	
+
 	/**
-	 * An Answer[] of answers to be shown with the question. 
+	 * An Answer[] of answers to be shown with the question.
 	 */
 	public static final String EXTRA_ANSWERS = "answersList";
-	
+
 	/**
 	 * The total number of questions for this questionare.
 	 */
 	public static final String EXTRA_TOTAL_QUESIONS = "questionsCount";
-	
+
 	/**
 	 * The current question index (zero based)
 	 */
 	public static final String EXTRA_QUESTION_INDEX = "questionIndex";
-	
+
 	protected Question question;
 	protected Answer[] answers;
 
@@ -59,6 +59,12 @@ public abstract class BaseQAQuestionActivity extends BaseNavigationActivity {
 		}
 	}
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		this.setTitle(question.title);
+	}
+
 	/**
 	 * Finish this activity. Pass back the question and the selected answer.
 	 * @param q	The current question, usually the one passed via the activity's
@@ -68,7 +74,7 @@ public abstract class BaseQAQuestionActivity extends BaseNavigationActivity {
 	protected final void finish(Question q, Answer selectedAnswer) {
 		this.finish(q, new Answer[]{selectedAnswer});
 	}
-	
+
 	/**
 	 * Finish this activity. Pass back the question and the selected answers.
 	 * @param q The current question, usually the one passed via the activity's

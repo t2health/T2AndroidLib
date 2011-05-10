@@ -39,31 +39,30 @@ import android.widget.Toast;
  */
 public class AccessibleWebView extends WebView {
 	private static final String TAG = AccessibleWebView.class.getSimpleName();
-	
+
 	private static final int WHAT_START_DOCUMENT_REACHED = 0;
 	private static final int WHAT_END_DOCUMENT_REACHED = 1;
-	
+
 	private AccessibilityManager aManager;
 	private JSInterface jsInterface;
 	private JSInterfaceHandler jsInterfaceHandler;
-	//private TextToSpeech tts;
-	//private boolean ttsInitSuccess = false; 
-	
+	private boolean mEndOfDocReached = false;
+
 	public AccessibleWebView(Context context) {
 		super(context);
 		this.init();
 	}
-	
+
 	public AccessibleWebView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.init();
 	}
-	
+
 	public AccessibleWebView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.init();
 	}
-	
+
 	/**
 	 * Init the webview and the necessary fields.
 	 */
@@ -71,27 +70,27 @@ public class AccessibleWebView extends WebView {
 		aManager = (AccessibilityManager)this.getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
 		jsInterface = new JSInterface();
 		jsInterfaceHandler = new JSInterfaceHandler();
-		
-		this.setWebViewClient(new AccessiblieWebViewClient());
+
+		this.setWebViewClient(new AccessibleWebViewClient());
 		this.setWebChromeClient(new WebChromeClient());
 		this.setBackgroundColor(Color.TRANSPARENT); // make the bg transparent
-		
+
 		WebSettings settings = this.getSettings();
 		settings.setJavaScriptEnabled(true);
-		
+
 		// register a class to handle communication between JS and this class.
 		this.addJavascriptInterface(jsInterface, "T2AWV_INTERFACE");
 	}
-	
+
 	@Override
 	public void loadData(String data, String mimeType, String encoding) {
 		StringBuffer sb = new StringBuffer();
-		
+
 		// add the TTS code to the HTML if everything is configured well.
 		if(aManager.isEnabled()) {
 			appendJS(sb);
 		}
-		
+
 		sb.append(data);
 		super.loadData(sb.toString(), mimeType, encoding);
 	}
@@ -100,16 +99,16 @@ public class AccessibleWebView extends WebView {
 	public void loadDataWithBaseURL(String baseUrl, String data,
 			String mimeType, String encoding, String historyUrl) {
 		StringBuffer sb = new StringBuffer();
-		
+
 		// add the TTS code to the HTML if everything is configured well.
 		if(aManager.isEnabled()) {
 			appendJS(sb);
 		}
-		
+
 		sb.append(data);
 		super.loadDataWithBaseURL(baseUrl, sb.toString(), mimeType, encoding, historyUrl);
 	}
-	
+
 	/**
 	 * Handles the appending of the code. The JS is read from a file in the raw
 	 * resources.
@@ -129,7 +128,7 @@ public class AccessibleWebView extends WebView {
 		}
 		sb.append("</script>\n");
 	}
-	
+
 	private boolean shiftFocus(int direction) {
 		View v = focusSearch(direction);
 		if(v != null) {
@@ -142,17 +141,23 @@ public class AccessibleWebView extends WebView {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(aManager.isEnabled()) {
 			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-				return super.onKeyDown(KeyEvent.KEYCODE_P, changeKeyCode(event, KeyEvent.KEYCODE_P));
-				
+				if(mEndOfDocReached) {
+					return true;
+				}
+				super.onKeyDown(KeyEvent.KEYCODE_P, changeKeyCode(event, KeyEvent.KEYCODE_P));
+				return true;
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-				return super.onKeyDown(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
-				
+				mEndOfDocReached = false;
+				super.onKeyDown(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
+				return true;
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 				if(!shiftFocus(View.FOCUS_RIGHT)) {
 					shiftFocus(View.FOCUS_DOWN);
 				}
 				return true;
-				
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
 				if(!shiftFocus(View.FOCUS_LEFT)) {
 					shiftFocus(View.FOCUS_UP);
@@ -160,7 +165,7 @@ public class AccessibleWebView extends WebView {
 				return true;
 			}
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -168,17 +173,23 @@ public class AccessibleWebView extends WebView {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(aManager.isEnabled()) {
 			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-				return super.onKeyUp(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
-				
+				if(mEndOfDocReached) {
+					return true;
+				}
+				super.onKeyUp(KeyEvent.KEYCODE_P, changeKeyCode(event, KeyEvent.KEYCODE_P));
+				return true;
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-				return super.onKeyUp(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
-				
+				mEndOfDocReached = false;
+				super.onKeyUp(KeyEvent.KEYCODE_Q, changeKeyCode(event, KeyEvent.KEYCODE_Q));
+				return true;
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
 				if(!shiftFocus(View.FOCUS_RIGHT)) {
 					shiftFocus(View.FOCUS_DOWN);
 				}
 				return true;
-				
+
 			} else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
 				if(!shiftFocus(View.FOCUS_LEFT)) {
 					shiftFocus(View.FOCUS_UP);
@@ -186,10 +197,10 @@ public class AccessibleWebView extends WebView {
 				return true;
 			}
 		}
-		
+
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	private static KeyEvent changeKeyCode(KeyEvent base, int newKeyCode) {
 		return new KeyEvent(
 				base.getDownTime(),
@@ -203,10 +214,11 @@ public class AccessibleWebView extends WebView {
 				base.getFlags()
 		);
 	}
-	
+
 	private void speakText(String text, int queueMode) {
 		if(aManager.isEnabled()) {
-			queueMode = TextToSpeech.QUEUE_ADD;
+			aManager.interrupt();
+
 			AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_FOCUSED);
 			event.setPackageName(this.getClass().getPackage().toString());
 			event.setClassName(this.getClass().getSimpleName());
@@ -215,7 +227,7 @@ public class AccessibleWebView extends WebView {
 			aManager.sendAccessibilityEvent(event);
 		}
 	}
-	
+
 	/**
 	 * Handles the communication between the JS and this class.
 	 * @author robbiev
@@ -225,16 +237,15 @@ public class AccessibleWebView extends WebView {
 		public void startOfDocumentReached() {
 			jsInterfaceHandler.sendEmptyMessage(WHAT_START_DOCUMENT_REACHED);
 		}
-		
+
 		public void endOfDocuemntReached() {
 			jsInterfaceHandler.sendEmptyMessage(WHAT_END_DOCUMENT_REACHED);
 		}
 	}
-	
+
 	private class JSInterfaceHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
-			View tmpView;
 			switch(msg.what) {
 				// we are at the start of the doc, shift focus to the view above.
 				case WHAT_START_DOCUMENT_REACHED:
@@ -242,8 +253,9 @@ public class AccessibleWebView extends WebView {
 						shiftFocus(FOCUS_LEFT);
 					}
 					break;
-					// we are at the start of the doc, shift focus to the view below.	
+					// we are at the start of the doc, shift focus to the view below.
 				case WHAT_END_DOCUMENT_REACHED:
+					mEndOfDocReached = true;
 					if(!shiftFocus(FOCUS_DOWN)) {
 						shiftFocus(FOCUS_RIGHT);
 					}
@@ -251,13 +263,13 @@ public class AccessibleWebView extends WebView {
 			}
 		}
 	}
-	
-	private class AccessiblieWebViewClient extends WebViewClient {
+
+	private class AccessibleWebViewClient extends WebViewClient {
 		@Override
 		public void onLoadResource(WebView view, String url) {
 			Uri uri = Uri.parse(url);
 			List<String> segments = uri.getPathSegments();
-			
+
 			if(uri.getScheme().equals("content") && uri.getHost().equals("com.ideal.webaccess.tts") && segments.size() > 2) {
 				String modeStr = segments.get(0);
 				String date = segments.get(1);
@@ -266,17 +278,17 @@ public class AccessibleWebView extends WebView {
 					message.append("/");
 					message.append(segments.get(i));
 				}
-				
+
 				int mode = TextToSpeech.QUEUE_FLUSH;
 				if(modeStr.startsWith("1")) {
 					mode = TextToSpeech.QUEUE_ADD;
 				}
-				
+
 				speakText(message.toString(), mode);
-				
+
 				return;
 			}
-			
+
 			super.onLoadResource(view, url);
 		}
 	}

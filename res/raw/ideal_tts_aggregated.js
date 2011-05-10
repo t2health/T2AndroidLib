@@ -48,14 +48,14 @@ function IDEAL_TTS_Speak(messageString, queueMode, params){
 }
 
 function IDEAL_TTS_Stop(){
-  IDEAL_TTS_Speak(" ", 0, null);
+  //IDEAL_TTS_Speak(" ", 0, null);
 }
 
 
 /* from ideal-keyhandler.js */
 function IDEAL_KEYHANDLER_Watcher(event){
   IDEAL_TTS_Stop();
-  
+
   // All hotkeys will be capitalized since we are watching keydown events.
   var hotkey = String.fromCharCode(event.keyCode);
   console.log("Key:"+hotkey);
@@ -68,18 +68,18 @@ function IDEAL_KEYHANDLER_Watcher(event){
       window.setTimeout("IDEAL_INTERFACE_PreviousSelectOption();", 0);
       return false;
     }
-  
+
     if (hotkey == 'P'){
       window.setTimeout("IDEAL_INTERFACE_NextSelectOption();", 0);
       return false;
     }
-  
+
     if (hotkey == ' '){
       IDEAL_INTERFACE_SwitchToBrowseMode();
 	  return false;
     }
   }
-  
+
   if (IDEAL_MODE != 0){
     if (event.keyCode == 16){
       IDEAL_SHIFTCOUNT = IDEAL_SHIFTCOUNT + 1;
@@ -92,20 +92,20 @@ function IDEAL_KEYHANDLER_Watcher(event){
     }
 	return true;
   }
-  
+
   event.cancelBubble = true;
   if (event.stopPropagation) event.stopPropagation();
-  
+
   if (hotkey == 'Q'){
     window.setTimeout("IDEAL_INTERFACE_ReadPrevious();", 0);
     return false;
   }
-  
+
   if (hotkey == 'P'){
     window.setTimeout("IDEAL_INTERFACE_ReadNext();", 0);
     return false;
   }
-  
+
   if (hotkey == ' '){
     window.setTimeout("IDEAL_INTERFACE_ActOnCurrentElem();", 0);
     return false;
@@ -162,7 +162,7 @@ function IDEAL_INTERFACE_ReadPrevious(){
   while (IDEAL_CurrentElement && !IDEAL_DOM_HasContent(IDEAL_CurrentElement)){
     IDEAL_CurrentElement = IDEAL_DOM_GetPreviousLeafNode(IDEAL_CurrentElement);
   }
-  if (IDEAL_CurrentElement){  
+  if (IDEAL_CurrentElement){
     IDEAL_TTS_Speak(IDEAL_DOM_GetMetaInfo(IDEAL_CurrentElement) + " " + IDEAL_DOM_GetContent(IDEAL_CurrentElement), 0, null);
     IDEAL_DOM_ScrollToElem(IDEAL_CurrentElement);
   } else {
@@ -216,7 +216,7 @@ function IDEAL_INTERFACE_ActOnCurrentElem(){
       document.location = targetNode.href;
     }
   }
-  
+
   if (targetNode.tagName == 'INPUT'){
 	var inputType = "";
 	if (targetNode.type){
@@ -233,13 +233,13 @@ function IDEAL_INTERFACE_ActOnCurrentElem(){
 	  return;
 	}
 	// Only switch modes if typing is involved
-    IDEAL_MODE = 1;	
+    IDEAL_MODE = 1;
 	IDEAL_TTS_Speak("Forms mode.", 0, null);
     window.setTimeout(function(){targetNode.focus();}, 0);
   }
-  
+
   if (targetNode.tagName == 'SELECT'){
-    IDEAL_MODE = 2;	
+    IDEAL_MODE = 2;
 	IDEAL_TTS_Speak("Combo box mode.", 0, null);
   }
 }
@@ -301,7 +301,7 @@ function IDEAL_DOM_GetNextLeafNode(targetNode){
   while (!IDEAL_DOM_IsLeaf(currentElem)){
     currentElem = currentElem.firstChild;
   }
-  return currentElem;  
+  return currentElem;
 }
 
 function IDEAL_DOM_GetPreviousLeafNode(targetNode){
@@ -322,7 +322,7 @@ function IDEAL_DOM_GetPreviousLeafNode(targetNode){
   while (!IDEAL_DOM_IsLeaf(currentElem)){
     currentElem = currentElem.lastChild;
   }
-  return currentElem;  
+  return currentElem;
 }
 
 
@@ -357,8 +357,8 @@ function IDEAL_DOM_HasContent(targetNode){
   if (IDEAL_DOM_GetContent(targetNode).length < 1){
     return false;
   }
-  
-  return true;  
+
+  return true;
 }
 
 function IDEAL_DOM_IsHidden(targetNode){
@@ -429,7 +429,7 @@ function IDEAL_DOM_GetContent(targetNode){
 	  selectNode = selectNode.parentNode;
 	}
 	return selectNode.value;
-  }  
+  }
   if (CLC_TagInLineage(lineage, "img")){
     if (targetNode.alt){
       return targetNode.alt;
@@ -441,9 +441,9 @@ function IDEAL_DOM_GetContent(targetNode){
   }
   if (targetNode.textContent && (targetNode.textContent.length > 0)){
 	var actualContent = targetNode.textContent;
-	while ((actualContent.charAt(0) == '\n') || 
-           (actualContent.charAt(0) == '\r') || 
-           (actualContent.charAt(0) == '\t') || 
+	while ((actualContent.charAt(0) == '\n') ||
+           (actualContent.charAt(0) == '\r') ||
+           (actualContent.charAt(0) == '\t') ||
            (actualContent.charAt(0) == ' ')    ){
       actualContent = actualContent.substring(1, actualContent.length);
     }
@@ -503,9 +503,9 @@ function IDEAL_DOM_ScrollToElem(targetNode){
   }
   var left = 0;
   var top = 0;
-  while (targetNode.offsetParent) { 
+  while (targetNode.offsetParent) {
     left += targetNode.offsetLeft;
-    top += targetNode.offsetTop; 
+    top += targetNode.offsetTop;
     targetNode = targetNode.offsetParent;
   }
   left += targetNode.offsetLeft;
@@ -518,14 +518,14 @@ function IDEAL_DOM_ScrollToElem(targetNode){
 //------------------------------------------
 //Returns an array of DOM objects that is the lineage
 //of the target object.
-//The array is ordered such that the target is the 
+//The array is ordered such that the target is the
 //last element in the array.
 //
 function CLC_GetLineage(target){
    var lineage = new Array();
    var object = target;
    while (object){
-      lineage.push(object);      
+      lineage.push(object);
       if (object.parentPointer){
          object = object.parentPointer;
          }
@@ -577,7 +577,7 @@ function CLC_AcontainsB(DOM_obja, DOM_objb){
 
 
 //------------------------------------------
-//Determines if a lineage has any DOM object with 
+//Determines if a lineage has any DOM object with
 //the specified HTML tag string
 //
 function CLC_TagInLineage(lineage, tag){
@@ -595,16 +595,16 @@ function CLC_TagInLineage(lineage, tag){
 //will include the label elements as parents of whatever
 //they are a label for.
 //If there are multiple labels, the earlier they appear in the HTML,
-//the "older" they are. "Older"/"younger" means that if both exist, the 
+//the "older" they are. "Older"/"younger" means that if both exist, the
 //older one will be the parent of the younger one.
 //
 function CLC_GetLogicalLineage(target){
    if (!target.tagName){
       return CLC_GetLineage(target);
       }
-   if (   (target.tagName.toLowerCase() != "input") && 
-          (target.tagName.toLowerCase() != "button") && 
-          (target.tagName.toLowerCase() != "select") && 
+   if (   (target.tagName.toLowerCase() != "input") &&
+          (target.tagName.toLowerCase() != "button") &&
+          (target.tagName.toLowerCase() != "select") &&
           (target.tagName.toLowerCase() != "textarea")    ) {
       return CLC_GetLineage(target);
       }
@@ -613,7 +613,7 @@ function CLC_GetLogicalLineage(target){
       }
 
     var tempLineage = CLC_GetLineage(target);
-    var labelArray = tempLineage[0].getElementsByTagName("label"); 
+    var labelArray = tempLineage[0].getElementsByTagName("label");
     //Build up the Logical Lineage of an input element
     var logicalLineage = new Array();
     //Last element should be the target itself

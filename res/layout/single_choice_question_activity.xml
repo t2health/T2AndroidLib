@@ -9,7 +9,8 @@
 		android:id="@+id/text1"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceMedium" />
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:focusable="true" />
 
 	<ListView
 		android:id="@+id/list"
