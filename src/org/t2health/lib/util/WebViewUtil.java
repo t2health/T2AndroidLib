@@ -1,5 +1,6 @@
 package org.t2health.lib.util;
 
+import android.R;
 import android.app.Activity;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
@@ -55,7 +56,8 @@ public class WebViewUtil {
 		WebSettings settings = wv.getSettings();
 		settings.setDefaultFontSize(webViewFontSizePoints);
 		settings.setDefaultFixedFontSize(webViewFontSizePoints);
+		settings.setJavaScriptEnabled(true);
 		
-		wv.loadDataWithBaseURL("fake:/blah", contentBuffer.toString(), "text/html", "utf-8", null);
+		wv.loadDataWithBaseURL("", contentBuffer.toString(), "text/html", "utf-8", null);
 	}
 }

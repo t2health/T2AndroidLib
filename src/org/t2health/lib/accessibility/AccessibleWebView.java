@@ -7,7 +7,10 @@ import java.util.List;
 
 import org.t2health.lib.R;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -48,6 +51,8 @@ public class AccessibleWebView extends WebView {
 	private JSInterfaceHandler jsInterfaceHandler;
 	private boolean mEndOfDocReached = false;
 
+	private AccessibleWebViewClient webViewClient;
+
 	public AccessibleWebView(Context context) {
 		super(context);
 		this.init();
@@ -70,8 +75,9 @@ public class AccessibleWebView extends WebView {
 		aManager = (AccessibilityManager)this.getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
 		jsInterface = new JSInterface();
 		jsInterfaceHandler = new JSInterfaceHandler();
-
-		this.setWebViewClient(new AccessibleWebViewClient());
+		webViewClient = new AccessibleWebViewClient();
+		
+		this.setWebViewClient(webViewClient);
 		this.setWebChromeClient(new WebChromeClient());
 		this.setBackgroundColor(Color.TRANSPARENT); // make the bg transparent
 
@@ -267,29 +273,39 @@ public class AccessibleWebView extends WebView {
 	private class AccessibleWebViewClient extends WebViewClient {
 		@Override
 		public void onLoadResource(WebView view, String url) {
-			Uri uri = Uri.parse(url);
-			List<String> segments = uri.getPathSegments();
-
-			if(uri.getScheme().equals("content") && uri.getHost().equals("com.ideal.webaccess.tts") && segments.size() > 2) {
-				String modeStr = segments.get(0);
-				String date = segments.get(1);
-				StringBuffer message = new StringBuffer(segments.get(2));
-				for(int i = 3; i < segments.size(); ++i) {
-					message.append("/");
-					message.append(segments.get(i));
+			// If accessibility is enabled, then try to work with the URL.
+			if(aManager.isEnabled()) {
+				Uri uri = Uri.parse(url);
+				List<String> segments = uri.getPathSegments();
+	
+				if(uri.getScheme().equals("content") && uri.getHost().equals("com.ideal.webaccess.tts") && segments.size() > 2) {
+					String modeStr = segments.get(0);
+					String date = segments.get(1);
+					StringBuffer message = new StringBuffer(segments.get(2));
+					for(int i = 3; i < segments.size(); ++i) {
+						message.append("/");
+						message.append(segments.get(i));
+					}
+	
+					int mode = TextToSpeech.QUEUE_FLUSH;
+					if(modeStr.startsWith("1")) {
+						mode = TextToSpeech.QUEUE_ADD;
+					}
+					Log.v(TAG, "DD");
+					speakText(message.toString(), mode);
+	
+					return;
 				}
-
-				int mode = TextToSpeech.QUEUE_FLUSH;
-				if(modeStr.startsWith("1")) {
-					mode = TextToSpeech.QUEUE_ADD;
-				}
-
-				speakText(message.toString(), mode);
-
-				return;
 			}
+		}
 
-			super.onLoadResource(view, url);
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			// Load the url
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			((Activity)getContext()).startActivity(intent);
+			
+			return true;
 		}
 	}
 }

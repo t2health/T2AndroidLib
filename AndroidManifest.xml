@@ -33,6 +33,18 @@
 		-->
 		<meta-data android:name="remoteStackTraceEnabled" android:value="true" />
 		<meta-data android:name="stackTraceURL" android:value="http://www2.tee2.org/trace/report.php" />
+		
+		<!-- 
+			Turn on analytics 
+			Your project will need to have the appropriate jar in the libs 
+			directory. The provider code will work with the jar automatically.
+			(if the provider is supported).
+			You may have to grant your app permission to location data if you
+			intent to collect that information.
+		-->
+		<meta-data android:name="analyticsEnabled" android:value="true" />
+		<meta-data android:name="analyticsProvider" android:value="provider here" />
+		<meta-data android:name="analyticsKey" android:value="KEY GOES HERE" />
     </application>
     <uses-sdk android:minSdkVersion="5" />
 </manifest> 
