@@ -66,7 +66,7 @@ public abstract class BaseService extends OrmLiteBaseService<DatabaseOpenHelper>
 	 * @param extraKey
 	 * @return
 	 */
-	protected String getIntentText(Intent intent, String extraKey) {
+	protected final String getIntentText(Intent intent, String extraKey) {
 		String text = intent.getStringExtra(extraKey);
 		
 		if(text != null && text.matches("[0-9]+")) {
@@ -79,9 +79,9 @@ public abstract class BaseService extends OrmLiteBaseService<DatabaseOpenHelper>
 		
 		return text;
 	}
-	
+
 	@Override
-	public synchronized DatabaseOpenHelper getHelper() {
+	public final synchronized DatabaseOpenHelper getHelper() {
 		if(isORMConfigured) {
 			return super.getHelper();
 		}

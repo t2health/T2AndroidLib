@@ -3,13 +3,11 @@ package org.t2health.lib.preference;
 import org.t2health.lib.ManifestMetaData;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
-import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.nullwire.trace.ExceptionHandler;
 
 public abstract class BasePreferenceActivity extends PreferenceActivity {
@@ -24,13 +22,6 @@ public abstract class BasePreferenceActivity extends PreferenceActivity {
         			ManifestMetaData.RemoteStackTrace.getURL(this)
 			);
         }
-        
-		// configure the database.
-        if(ManifestMetaData.Database.isConfigured(this) && ManifestSqliteOpenHelperFactory.isClassesConfigured(this)) {
-			OpenHelperManager.setOpenHelperFactory(
-					ManifestSqliteOpenHelperFactory.getInstance()
-			);
-		}
         
 		// configure and make analytics event call.
 		if(ManifestMetaData.Analytics.isEnabled(this)) {
@@ -63,7 +54,7 @@ public abstract class BasePreferenceActivity extends PreferenceActivity {
 	 * @param extraKey
 	 * @return
 	 */
-	protected String getIntentText(Intent intent, String extraKey) {
+	protected final String getIntentText(Intent intent, String extraKey) {
 		String text = intent.getStringExtra(extraKey);
 		
 		if(text != null && text.matches("[0-9]+")) {

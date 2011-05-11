@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.nullwire.trace.ExceptionHandler;
 
@@ -75,7 +74,7 @@ public abstract class BaseListActivity extends OrmLiteBaseListActivity<DatabaseO
 	 * @param extraKey
 	 * @return
 	 */
-	protected String getIntentText(Intent intent, String extraKey) {
+	protected final String getIntentText(Intent intent, String extraKey) {
 		String text = intent.getStringExtra(extraKey);
 		
 		if(text != null && text.matches("[0-9]+")) {
@@ -90,7 +89,7 @@ public abstract class BaseListActivity extends OrmLiteBaseListActivity<DatabaseO
 	}
 
 	@Override
-	public synchronized DatabaseOpenHelper getHelper() {
+	public final synchronized DatabaseOpenHelper getHelper() {
 		if(isORMConfigured) {
 			return super.getHelper();
 		}

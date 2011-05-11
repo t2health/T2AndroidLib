@@ -1,6 +1,7 @@
 package org.t2health.lib.preference;
 
 import org.t2health.lib.R;
+import org.t2health.lib.widget.TextImageButton;
 
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 public abstract class BasePreferenceNavigationActivity extends
 		BasePreferenceSecurityActivity {
-	private static final String exceptionText = "setContentView should be ran before any modication methods.";
+private static final String exceptionText = "setContentView should be ran before any modication methods.";
 	
 	/**
 	 * The text (presented as String or Resource ID) to set in the title bar.
@@ -130,7 +131,7 @@ public abstract class BasePreferenceNavigationActivity extends
 		this.findViewById(R.id.navigationLeftButton).setOnClickListener(mNavItemEventListener);
 		this.findViewById(R.id.navigationRightButton).setOnClickListener(mNavItemEventListener);
 	}
-	
+
 	@Override
 	public void setContentView(int layoutResID) {
 		View baseLayout = getLayoutInflater().inflate(R.layout.base_navigation_activity, null);
@@ -171,6 +172,7 @@ public abstract class BasePreferenceNavigationActivity extends
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
+		super.setTitle(title);
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(title);
 	}
 
@@ -179,6 +181,7 @@ public abstract class BasePreferenceNavigationActivity extends
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
+		super.setTitle(titleId);
 		((TextView)this.findViewById(R.id.navigationTitle)).setText(titleId);
 	}
 
@@ -233,14 +236,38 @@ public abstract class BasePreferenceNavigationActivity extends
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
-		((TextView)this.findViewById(R.id.navigationLeftButton)).setText(resId);
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationLeftButton);
+		button.setText(resId);
+		button.setTextVisibility(View.VISIBLE);
+		button.setImageVisibility(View.GONE);
 	}
 	
+	/**
+	 * Set the left button's text with a specific string resource id.
+	 * @param resId the resource id of the string to set on the button.
+	 */
 	private void setLeftNavigationButtonText(CharSequence text) {
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
-		((TextView)this.findViewById(R.id.navigationLeftButton)).setText(text);
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationLeftButton);
+		button.setText(text);
+		button.setTextVisibility(View.VISIBLE);
+		button.setImageVisibility(View.GONE);
+	}
+	
+	/**
+	 * Set the right button's image.
+	 * @param res The resource id of the drawable to set on the button.
+	 */
+	protected void setLeftNavigationButtonImageResource(int res) {
+		if(!mIsInitialized) {
+			throw new RuntimeException(exceptionText);
+		}
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationLeftButton);
+		button.setImageResource(res);
+		button.setTextVisibility(View.GONE);
+		button.setImageVisibility(View.VISIBLE);
 	}
 	
 	/**
@@ -256,20 +283,44 @@ public abstract class BasePreferenceNavigationActivity extends
 	
 	/**
 	 * Set the right button's text with a specific string resource id.
-	 * @param resId
+	 * @param resId the resource id of the string to set on the button.
 	 */
 	protected void setRightNavigationButtonText(int resId) {
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
-		((TextView)this.findViewById(R.id.navigationRightButton)).setText(resId);
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationRightButton);
+		button.setText(resId);
+		button.setTextVisibility(View.VISIBLE);
+		button.setImageVisibility(View.GONE);
 	}
 	
+	/**
+	 * Set the right button's text with specified string.
+	 * @param text The text to set on the button.
+	 */
 	private void setRightNavigationButtonText(CharSequence text) {
 		if(!mIsInitialized) {
 			throw new RuntimeException(exceptionText);
 		}
-		((TextView)this.findViewById(R.id.navigationRightButton)).setText(text);
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationRightButton);
+		button.setText(text);
+		button.setTextVisibility(View.VISIBLE);
+		button.setImageVisibility(View.GONE);
+	}
+	
+	/**
+	 * Set the right button's image.
+	 * @param res The resource id of the drawable to set on the button.
+	 */
+	protected void setRightNavigationButtonImageResource(int res) {
+		if(!mIsInitialized) {
+			throw new RuntimeException(exceptionText);
+		}
+		TextImageButton button = (TextImageButton)this.findViewById(R.id.navigationRightButton);
+		button.setImageResource(res);
+		button.setTextVisibility(View.GONE);
+		button.setImageVisibility(View.VISIBLE);
 	}
 	
 	/**

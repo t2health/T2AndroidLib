@@ -1,6 +1,5 @@
 package org.t2health.lib.util;
 
-import android.R;
 import android.app.Activity;
 import android.graphics.Color;
 import android.util.DisplayMetrics;

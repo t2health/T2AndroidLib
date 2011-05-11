@@ -2,33 +2,15 @@ package org.t2health.lib.activity;
 
 
 import org.t2health.lib.ManifestMetaData;
-import org.t2health.lib.R;
 import org.t2health.lib.SharedPref;
 import org.t2health.lib.analytics.Analytics;
 import org.t2health.lib.db.DatabaseOpenHelper;
 import org.t2health.lib.db.ManifestSqliteOpenHelperFactory;
 
-import android.app.Activity;
-import android.app.LocalActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.FrameLayout;
-import android.widget.TabHost;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
-import android.widget.TabWidget;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseTabActivity;
 import com.nullwire.trace.ExceptionHandler;
 
@@ -92,7 +74,7 @@ public abstract class BaseTabActivity extends OrmLiteBaseTabActivity<DatabaseOpe
 	 * @param extraKey
 	 * @return
 	 */
-	protected String getIntentText(Intent intent, String extraKey) {
+	protected final String getIntentText(Intent intent, String extraKey) {
 		String text = intent.getStringExtra(extraKey);
 		
 		if(text != null && text.matches("[0-9]+")) {
@@ -107,7 +89,7 @@ public abstract class BaseTabActivity extends OrmLiteBaseTabActivity<DatabaseOpe
 	}
 
 	@Override
-	public synchronized DatabaseOpenHelper getHelper() {
+	public final synchronized DatabaseOpenHelper getHelper() {
 		if(isORMConfigured) {
 			return super.getHelper();
 		}

@@ -1,17 +1,16 @@
 package org.t2health.lib.widget;
 
-import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 import org.t2health.lib.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -96,31 +95,80 @@ public class TextImageButton extends LinearLayout {
 		textView.setFocusable(false);
 		textView.setBackgroundColor(Color.TRANSPARENT);
 		textView.setBackgroundDrawable(null);
+		textView.setPadding(0, 0, 0, 0);
 	}
 
 	private void layout() {
 		this.removeAllViews();
 		
-		// set the orientation of this view.
-		if(this.imagePosition == IMAGE_POSITION.LEFT) {
-			this.setGravity(Gravity.CENTER_VERTICAL);
-			this.setOrientation(HORIZONTAL);
-			
-		} else if(this.imagePosition == IMAGE_POSITION.TOP) {
-			this.setGravity(Gravity.CENTER_HORIZONTAL);
-			this.setOrientation(VERTICAL);
-			
-		} else if(this.imagePosition == IMAGE_POSITION.RIGHT) {
-			this.setGravity(Gravity.CENTER_VERTICAL);
-			this.setOrientation(HORIZONTAL);
-			
-		} else if(this.imagePosition == IMAGE_POSITION.BOTTOM) {
-			this.setGravity(Gravity.CENTER_HORIZONTAL);
-			this.setOrientation(VERTICAL);
+		// add the child views.
+		switch(this.imagePosition) {
+			case LEFT:
+				this.setGravity(Gravity.CENTER_VERTICAL);
+				this.setOrientation(HORIZONTAL);
+				this.addView(imageView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.FILL_PARENT
+				));	
+				this.addView(textView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.FILL_PARENT,
+								1.0f
+				));
+				break;
+				
+			case TOP:
+				this.setGravity(Gravity.CENTER_HORIZONTAL);
+				this.setOrientation(VERTICAL);
+				this.addView(imageView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.FILL_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT
+				));	
+				this.addView(textView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.FILL_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								1.0f
+				));
+				break;
+				
+			case RIGHT:
+				this.setGravity(Gravity.CENTER_VERTICAL);
+				this.setOrientation(HORIZONTAL);
+				this.addView(textView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.FILL_PARENT,
+								1.0f
+				));
+				this.addView(imageView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.FILL_PARENT
+				));	
+				break;
+				
+			case BOTTOM:
+				this.setGravity(Gravity.CENTER_HORIZONTAL);
+				this.setOrientation(VERTICAL);
+				this.addView(textView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.FILL_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								1.0f
+				));
+				this.addView(imageView,
+						new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.FILL_PARENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT
+				));	
+				break;
 		}
 		
-		// add the child views.
-		if(this.imagePosition == IMAGE_POSITION.LEFT || this.imagePosition == IMAGE_POSITION.TOP) {
+		/*if(this.imagePosition == IMAGE_POSITION.LEFT || this.imagePosition == IMAGE_POSITION.TOP) {
 			this.addView(imageView,
 					new LinearLayout.LayoutParams(
 							LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -145,41 +193,15 @@ public class TextImageButton extends LinearLayout {
 							LinearLayout.LayoutParams.WRAP_CONTENT,
 							LinearLayout.LayoutParams.WRAP_CONTENT
 			));	
-		}
-	}
-
-	/**
-	 * Set the position of the image relative to the text.
-	 * @param pos
-	 */
-	public void setImagePosition(IMAGE_POSITION pos) {
-		imagePosition = pos;
-		layout();
+		}*/
 	}
 	
 	/**
-	 * Set the resources to use for the image.
-	 * @param resId
+	 * Return the button's drawable image, or null if no drawable has be assigned.
+	 * @return
 	 */
-	public void setImageResource(int resId) {
-		this.imageView.setImageResource(resId);
-		this.imageView.setVisibility(View.VISIBLE);
-	}
-
-	/**
-	 * Set the text of the button.
-	 * @param text
-	 */
-	public void setText(CharSequence text) {
-		this.textView.setText(text);
-	}
-
-	/**
-	 * Set the text of the button.
-	 * @param resid
-	 */
-	public void setText(int resid) {
-		this.textView.setText(resid);
+	public Drawable getImageDrawable() {
+		return this.imageView.getDrawable();
 	}
 	
 	/**
@@ -204,5 +226,73 @@ public class TextImageButton extends LinearLayout {
 	 */
 	public TextView getTextView() {
 		return this.textView;
+	}
+
+	/**
+	 * Set the position of the image relative to the text.
+	 * @param pos
+	 */
+	public void setImagePosition(IMAGE_POSITION pos) {
+		imagePosition = pos;
+		layout();
+	}
+	
+	/**
+	 * Sets a drawable as the content of this button.
+	 * @param resId the resource identifier of the the drawable
+	 */
+	public void setImageResource(int resId) {
+		this.imageView.setImageResource(resId);
+		this.imageView.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Sets a drawable as the content of this button
+	 * @param bm The bitmap to set.
+	 */
+	public void setImageBitmap(Bitmap bm) {
+		this.imageView.setImageBitmap(bm);
+		this.imageView.setVisibility(View.VISIBLE);
+	}
+	
+	/**
+	 * Sets a drawable as the content of this button.
+	 * @param drawable The drawable to set
+	 */
+	public void setImageDrawable(Drawable drawable) {
+		this.imageView.setImageDrawable(drawable);
+		this.imageView.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * Set the text of the button.
+	 * @param text
+	 */
+	public void setText(CharSequence text) {
+		this.textView.setText(text);
+	}
+
+	/**
+	 * Set the text of the button.
+	 * @param resid
+	 */
+	public void setText(int resid) {
+		this.textView.setText(resid);
+	}
+	
+	/**
+	 * Set the visibility of the image in the button.
+	 * @param visibility the visibility as defined in @see android.view.View
+	 */
+	public void setImageVisibility(int visibility) {
+		this.imageView.setVisibility(visibility);
+	}
+	
+	/**
+	 * Set the visibility of the text in the button.
+	 * @param visibility the visibility as defined in @see android.view.View
+	 */
+	public void setTextVisibility(int visibility) {
+		this.textView.setVisibility(visibility);
 	}
 }

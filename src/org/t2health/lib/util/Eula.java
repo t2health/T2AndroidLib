@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
  * be shown again. If the user refuses, {@link android.app.Activity#finish()} is invoked
  * on your activity.
  * @see http://code.google.com/p/apps-for-android/source/browse/trunk/Photostream/src/com/google/android/photostream/Eula.java
+ * @TODO rewrite this. The original code is messy.
  */
 public class Eula {
 //    private static final String ASSET_EULA = "EULA";

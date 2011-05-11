@@ -57,6 +57,8 @@ import android.widget.SimpleAdapter;
  * needs be be listed in your manifest file as an activity.
  * @author robbiev
  *
+ * @TODO Make this activity take a URL too. Then use a conditional GET to
+ * get the updated content. Cache the new content some place.
  */
 public class XMLItemsBrowserActivity extends BaseNavigationActivity implements OnItemClickListener {
 	/**

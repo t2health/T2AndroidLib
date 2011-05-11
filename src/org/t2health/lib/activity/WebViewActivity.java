@@ -12,6 +12,9 @@ import android.webkit.WebView;
 /**
  * A simple activity that will display HTML generated content.
  * @author robbiev
+ * 
+ * @TODO Make this activity take a URL too. Then use a conditional GET to
+ * get the updated content. Cache the new content some place.
  *
  */
 public class WebViewActivity extends BaseNavigationActivity {

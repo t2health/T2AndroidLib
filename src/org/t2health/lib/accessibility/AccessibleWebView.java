@@ -8,11 +8,9 @@ import java.util.List;
 import org.t2health.lib.R;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +25,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 /**
  * A WebView that is designed to read its contents. In order to get the screen
@@ -38,7 +35,8 @@ import android.widget.Toast;
  *		<provider android:name="org.t2health.lib.accessibility.TtsContentProvider"
  *			android:authorities="<YOUR APP CLASSPATH HERE>.TtsContentProvider" />
  * @author robbiev
- *
+ * @TODO remove all accessibility functionality if this is Honeycomb or higher.
+ * As newer versions of android have webview accessibility.
  */
 public class AccessibleWebView extends WebView {
 	private static final String TAG = AccessibleWebView.class.getSimpleName();

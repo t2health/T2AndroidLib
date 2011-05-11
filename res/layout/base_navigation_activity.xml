@@ -17,7 +17,8 @@
 			android:layout_height="fill_parent"
 			android:gravity="center_vertical"
 			android:background="@drawable/t2_base_navigation_title_bg_overlay">
-			<Button
+			<view
+				class="org.t2health.lib.widget.TextImageButton"
 				android:id="@+id/navigationLeftButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -37,7 +38,8 @@
 				android:focusableInTouchMode="true"
 				android:contentDescription="@string/navigation_title_desc" />
 	
-			<Button
+			<view
+				class="org.t2health.lib.widget.TextImageButton"
 				android:id="@+id/navigationRightButton"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
