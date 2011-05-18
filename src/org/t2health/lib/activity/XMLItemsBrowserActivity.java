@@ -82,6 +82,12 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	 */
 	public static final String EXTRA_LIST_ITEM_RES_ID = "listItemResId";
 
+	/**
+	 * Specifies whether or not the separator of a list is clickable. If true,
+	 * clicking the separator will load a list of items for that separator.
+	 */
+	public static final String EXTRA_LIST_SEPARATOR_CLICKABLE = "separatorClickable";
+	
 	private static final String STYLE_NORMAL = "normal";
 	private static final String STYLE_SEPARATED = "separated";
 	private static final String BASE_ITEM_ID = "baseItemId";
@@ -95,8 +101,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 	protected static final String LIST_ITEM_TITLE = "title";
 	protected static final String LIST_ITEM_ID = "id";
-	//private static final String TAG = XMLItemsBrowserActivity.class.getSimpleName();
 
+	private boolean isClickableSeperatorEnabled = false;
 	private int mXmlResource = -1;
 
 	private int mSeperatorResId = -1;
@@ -108,6 +114,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	private int[] mItemTo;
 	protected LinkedHashMap<String, Item> mItemsMap;
 
+	private SimpleSeperatorAdapter adapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,7 +124,8 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 
 		this.mSeperatorResId = intent.getIntExtra(EXTRA_LIST_SEPARATOR_RES_ID, this.getHeaderLayoutResId());
 		this.mItemResId = intent.getIntExtra(EXTRA_LIST_ITEM_RES_ID, this.getItemLayoutResId());
-
+		this.isClickableSeperatorEnabled = intent.getBooleanExtra(EXTRA_LIST_SEPARATOR_CLICKABLE, false);
+		
 		this.setSeparatorResource(
 				this.mSeperatorResId,
 				new String[]{
@@ -164,10 +173,11 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			listView.setScrollingCacheEnabled(false);
 			listView.setCacheColorHint(Color.TRANSPARENT);
 			if(baseItem.style.equals(STYLE_SEPARATED)) {
-				listView.setAdapter(getSeparatedAdapter(baseItem));
+				this.adapter = getSeparatedAdapter(baseItem);
 			} else {
-				listView.setAdapter(getSimpleAdapter(baseItem));
+				this.adapter = getSimpleAdapter(baseItem);
 			}
+			listView.setAdapter(this.adapter);
 			listView.setOnItemClickListener(this);
 
 			this.setContentView(
@@ -179,7 +189,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			);
 			this.setTitle(baseItem.title);
 		} else {
-			this.onItemClick(baseItem);
+			this.onItemClick(baseItem, false);
 			this.finish();
 			return;
 		}
@@ -416,7 +426,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		return attributes;
 	}
 
-	private BaseAdapter getSimpleAdapter(Item baseItem) {
+	private SimpleSeperatorAdapter getSimpleAdapter(Item baseItem) {
 		// build the adapter.
 		return new SimpleSeperatorAdapter(
 				this,
@@ -477,16 +487,16 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		@SuppressWarnings("unchecked")
 		HashMap<String,Object> itemMap = (HashMap<String, Object>) adapter.getItem(arg2);
 		String id = (String) itemMap.get(LIST_ITEM_ID);
-		onItemClick(mItemsMap.get(id));
+		onItemClick(mItemsMap.get(id), this.adapter.isSeperator(arg2));
 	}
 
-	public void onItemClick(Item item) {
+	private void onItemClick(Item item, boolean isSeperator) {
 		if(item.destUri != null) {
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
 			intent.setData(item.destUri);
 			startActivity(intent);
 
-		} else if(item.hasItems(this.mItemsMap)) {
+		} else if((!isSeperator && item.hasItems(this.mItemsMap)) || (isSeperator && isClickableSeperatorEnabled && item.hasItems(this.mItemsMap))) {
 			Intent intent = new Intent(this, this.getClass());
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_XML_RESOURCE, this.mXmlResource);
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_START_ID, item.id);
@@ -609,6 +619,10 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			return super.getView(position, null, parent);
 		}
 
+		public boolean isSeperator(int pos) {
+			return isSeperator((HashMap<String,Object>)getItem(pos));
+		}
+		
 		private boolean isSeperator(HashMap<String,Object> item) {
 			Boolean isSep = (Boolean) item.get(IS_SEPERATOR_ITEM_KEY);
 

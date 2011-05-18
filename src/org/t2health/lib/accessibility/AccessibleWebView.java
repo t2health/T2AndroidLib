@@ -144,7 +144,11 @@ public class AccessibleWebView extends WebView {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(aManager.isEnabled()) {
-			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+			if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+				super.onKeyDown(KeyEvent.KEYCODE_SPACE, changeKeyCode(event, KeyEvent.KEYCODE_SPACE));
+				return true;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 				if(mEndOfDocReached) {
 					return true;
 				}
@@ -176,7 +180,11 @@ public class AccessibleWebView extends WebView {
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(aManager.isEnabled()) {
-			if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+			if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+				super.onKeyDown(KeyEvent.KEYCODE_SPACE, changeKeyCode(event, KeyEvent.KEYCODE_SPACE));
+				return true;
+				
+			} else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
 				if(mEndOfDocReached) {
 					return true;
 				}

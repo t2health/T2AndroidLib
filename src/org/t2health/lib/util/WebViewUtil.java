@@ -15,7 +15,8 @@ import android.widget.TextView;
  */
 public class WebViewUtil {
 	/**
-	 * Sets the style of a webview.
+	 * Sets the text style of a webview to match the current style of textviews 
+	 * in your app.
 	 * @param c
 	 * @param wv
 	 * @param contentString

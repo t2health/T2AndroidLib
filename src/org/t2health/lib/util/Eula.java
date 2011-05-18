@@ -31,10 +31,8 @@ import android.content.SharedPreferences;
  * be shown again. If the user refuses, {@link android.app.Activity#finish()} is invoked
  * on your activity.
  * @see http://code.google.com/p/apps-for-android/source/browse/trunk/Photostream/src/com/google/android/photostream/Eula.java
- * @TODO rewrite this. The original code is messy.
  */
 public class Eula {
-//    private static final String ASSET_EULA = "EULA";
     private static final String PREFERENCE_EULA_ACCEPTED = "eula.accepted";
     private static final String PREFERENCES_EULA = "eula";
 
@@ -57,32 +55,37 @@ public class Eula {
      * @return Whether the user has agreed already.
      */
     public static boolean show(final Activity activity) {
-        final SharedPreferences preferences = activity.getSharedPreferences(PREFERENCES_EULA,
-                Activity.MODE_PRIVATE);
-        if (!preferences.getBoolean(PREFERENCE_EULA_ACCEPTED, false)) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle(R.string.eula_title);
-            builder.setCancelable(true);
-            builder.setPositiveButton(R.string.eula_accept, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    accept(preferences);
-                    if (activity instanceof OnEulaAgreedTo) {
-                        ((OnEulaAgreedTo) activity).onEulaAgreedTo();
-                    }
-                }
-            });
-            builder.setNegativeButton(R.string.eula_refuse, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    refuse(activity);
-                }
-            });
-            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface dialog) {
-                    refuse(activity);
-                }
-            });
-            builder.setMessage(readEula(activity));
-            Accessibility.show(builder.create());
+        final SharedPreferences preferences = activity.getSharedPreferences(
+			PREFERENCES_EULA,
+			Activity.MODE_PRIVATE
+		);
+        
+        if(!preferences.getBoolean(PREFERENCE_EULA_ACCEPTED, false)) {
+        	Accessibility.show(
+	            new AlertDialog.Builder(activity)
+	            	.setTitle(R.string.eula_title)
+	            	.setCancelable(true)
+	            	.setPositiveButton(R.string.eula_accept, new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int which) {
+		                    accept(preferences);
+		                    if (activity instanceof OnEulaAgreedTo) {
+		                        ((OnEulaAgreedTo) activity).onEulaAgreedTo();
+		                    }
+		                }
+	            	})
+	            	.setNegativeButton(R.string.eula_refuse, new DialogInterface.OnClickListener() {
+		                public void onClick(DialogInterface dialog, int which) {
+		                    refuse(activity);
+		                }
+		            })
+		            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+		                public void onCancel(DialogInterface dialog) {
+		                    refuse(activity);
+		                }
+		            })
+		            .setMessage(readEula(activity))
+		            .create()
+            );
             return false;
         }
         return true;

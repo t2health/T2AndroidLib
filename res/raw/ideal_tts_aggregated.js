@@ -114,7 +114,7 @@ function IDEAL_KEYHANDLER_Watcher(event){
 }
 
 function IDEAL_KEYHANDLER_FocusOnCommandArea(){
-  var commandArea = document.getElementById("IDEAL_CommandArea");
+  /*var commandArea = document.getElementById("IDEAL_CommandArea");
   if (!commandArea){
     commandArea = document.createElement("input");
     commandArea.id = "IDEAL_CommandArea";
@@ -130,7 +130,7 @@ function IDEAL_KEYHANDLER_FocusOnCommandArea(){
 	  true);
 	document.body.appendChild(commandArea);
   }
-  commandArea.focus();
+  commandArea.focus();*/
 }
 
 function IDEAL_KEYHANDLER_Init(){
