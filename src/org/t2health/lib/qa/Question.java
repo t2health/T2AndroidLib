@@ -16,6 +16,7 @@ public class Question implements Parcelable {
 	public String title;
 	public String desc;
 	public String[] answerIds = new String[]{};
+	public String[] correctAnswerIds = new String[]{};
 
 	public static final Parcelable.Creator<Question> CREATOR
 		= new Parcelable.Creator<Question>() {

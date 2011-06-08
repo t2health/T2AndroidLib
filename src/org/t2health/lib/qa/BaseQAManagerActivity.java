@@ -37,6 +37,7 @@ public abstract class BaseQAManagerActivity extends BaseNavigationActivity {
 	private static final String XML_ATTR_DESC = "desc";
 	private static final String XML_ATTR_VALUE = "value";
 	private static final String XML_ATTR_ANSWER_IDS = "answerIds";
+	private static final String XML_ATTR_CORRECT_ANSWER_IDS = "correctanswerIds";
 	
 	//private static final String TAG = BaseQAManagerActivity.class.getSimpleName();
 	private Questionare questionare = new Questionare();
@@ -151,6 +152,7 @@ public abstract class BaseQAManagerActivity extends BaseNavigationActivity {
 							q.desc = parser.getAttributeValue(null, XML_ATTR_DESC);
 							q.title = parser.getAttributeValue(null, XML_ATTR_TITLE);
 							q.answerIds = parser.getAttributeValue(null, XML_ATTR_ANSWER_IDS).split(",");
+							q.correctAnswerIds = parser.getAttributeValue(null, XML_ATTR_CORRECT_ANSWER_IDS).split(",");
 							this.getQuestions().put(q.id, q);
 						}
 					} else if(prevTag.equals(XML_TAG_ANSWERS)) {
