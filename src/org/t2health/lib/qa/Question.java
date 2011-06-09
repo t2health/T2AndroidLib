@@ -41,6 +41,9 @@ public class Question implements Parcelable {
 		this.desc = in.readString();
 		this.answerIds = new String[in.readInt()];
 		in.readStringArray(this.answerIds);
+		
+		this.correctAnswerIds = new String[in.readInt()];
+		in.readStringArray(this.correctAnswerIds);
 	}
 
 	@Override
@@ -53,8 +56,12 @@ public class Question implements Parcelable {
 		dest.writeString(this.id);
 		dest.writeString(this.title);
 		dest.writeString(this.desc);
+		
 		dest.writeInt(this.answerIds.length);
 		dest.writeStringArray(this.answerIds);
+		
+		dest.writeInt(this.correctAnswerIds.length);
+		dest.writeStringArray(this.correctAnswerIds);
 	}
 
 	public Answer[] getAnswers(HashMap<String,Answer> answers) {
