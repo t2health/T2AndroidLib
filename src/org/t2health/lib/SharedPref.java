@@ -146,7 +146,7 @@ public class SharedPref {
 	
 	public static class Analytics {
 		public static boolean isEnabled(Context c) {
-			return getBoolean(c, "analytics_enabled", false);
+			return getBoolean(c, "analytics_enabled", true);
 		}
 		
 		public static void setIsEnabled(Context c, boolean b) {
