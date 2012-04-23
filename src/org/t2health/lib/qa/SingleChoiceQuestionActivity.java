@@ -48,10 +48,9 @@ public class SingleChoiceQuestionActivity extends BaseQAQuestionActivity impleme
 
 	@Override
 	public void onClick(View arg0) {
-		switch(arg0.getId()) {
-		case R.id.nextButton:
+		int viewId = arg0.getId();
+		if(viewId == R.id.nextButton) {
 			this.finish(question, selectedAnswer);
-			break;
 		}
 	}
 }

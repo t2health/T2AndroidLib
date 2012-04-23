@@ -17,6 +17,7 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -121,7 +122,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 		super.onCreate(savedInstanceState);
 
 		Intent intent = this.getIntent();
-
+		
 		this.mSeperatorResId = intent.getIntExtra(EXTRA_LIST_SEPARATOR_RES_ID, this.getHeaderLayoutResId());
 		this.mItemResId = intent.getIntExtra(EXTRA_LIST_ITEM_RES_ID, this.getItemLayoutResId());
 		this.isClickableSeperatorEnabled = intent.getBooleanExtra(EXTRA_LIST_SEPARATOR_CLICKABLE, false);
@@ -179,7 +180,7 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 			}
 			listView.setAdapter(this.adapter);
 			listView.setOnItemClickListener(this);
-
+			
 			this.setContentView(
 					listView,
 					new LayoutParams(
@@ -491,23 +492,29 @@ public class XMLItemsBrowserActivity extends BaseNavigationActivity implements O
 	}
 
 	private void onItemClick(Item item, boolean isSeperator) {
+		// this item has a url, load the url.
 		if(item.destUri != null) {
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
 			intent.setData(item.destUri);
 			startActivity(intent);
 
+		// this item is a list of more items, show them.
 		} else if((!isSeperator && item.hasItems(this.mItemsMap)) || (isSeperator && isClickableSeperatorEnabled && item.hasItems(this.mItemsMap))) {
 			Intent intent = new Intent(this, this.getClass());
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_XML_RESOURCE, this.mXmlResource);
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_START_ID, item.id);
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_SEPARATOR_RES_ID, this.mSeperatorResId);
 			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LIST_ITEM_RES_ID, this.mItemResId);
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_GESTURES_ENABLED, this.getIsGesturesEnabled());
+			intent.putExtra(XMLItemsBrowserActivity.EXTRA_LEFT_BUTTON_VISIBILITY, View.VISIBLE);
 			this.startActivity(intent);
 			
+		// this is content, show the content in a webview.
 		} else if(item.hasContent()){
 			Intent intent = new Intent(this, WebViewActivity.class);
 			intent.putExtra(WebViewActivity.EXTRA_CONTENT, item.content);
 			intent.putExtra(WebViewActivity.EXTRA_TITLE_TEXT, item.title);
+			intent.putExtra(WebViewActivity.EXTRA_GESTURES_ENABLED, this.getIsGesturesEnabled());
 			this.startActivity(intent);
 		}
 	}

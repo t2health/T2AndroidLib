@@ -1,58 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<view
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	class="android.gesture.GestureOverlayView"
+	android:id="@+id/navigationGestureOverlay"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:orientation="vertical">
+	android:eventsInterceptionEnabled="true"
+	android:gestureColor="#00FFFFFF">
 
 	<LinearLayout
-		android:id="@+id/navigationTitleWrapper"
 		android:layout_width="fill_parent"
-		android:layout_height="48dip"
-		android:gravity="center_vertical"
-		android:background="#FF000000">
-		
-		<LinearLayout
+		android:layout_height="fill_parent"
+		android:orientation="vertical">
+       	    
+		<FrameLayout
+			android:id="@+id/navigationTitleWrapper"
 			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_height="48dip"
 			android:gravity="center_vertical"
-			android:background="@drawable/t2_base_navigation_title_bg_overlay">
-			<view
-				class="org.t2health.lib.widget.TextImageButton"
-				android:id="@+id/navigationLeftButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginRight="5dip"
-				android:contentDescription="@string/navigation_left_button_desc" />
+			android:background="?attr/navigationHeaderBgColor">
+			
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="20dip"
+				android:gravity="center_vertical"
+				android:background="@drawable/t2_base_navigation_title_bg_overlay">
+			</LinearLayout>
+			
+			<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
+				android:gravity="center_vertical">
+				<view
+					class="org.t2health.lib.widget.TextImageButton"
+					android:id="@+id/navigationLeftButton"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="5dip"
+					android:contentDescription="@string/navigation_left_button_desc" />
+		
+				<TextView
+					android:id="@+id/navigationTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1.0"
+					style="?attr/navigationHeaderTextAppearance"
+					android:textColor="?attr/navigationHeaderTextColor"
+					android:text=""
+					android:maxLines="2"
+					android:ellipsize="end"
+					android:focusable="true"
+					android:focusableInTouchMode="true"
+					android:contentDescription="@string/navigation_title_desc" />
+		
+				<view
+					class="org.t2health.lib.widget.TextImageButton"
+					android:id="@+id/navigationRightButton"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="5dip"
+					android:contentDescription="@string/navigation_right_button_desc" />
+			</LinearLayout>
+		</FrameLayout>
 	
-			<TextView
-				android:id="@+id/navigationTitle"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_weight="1.0"
-				style="@android:style/TextAppearance.Medium"
-				android:text=""
-				android:maxLines="2"
-				android:ellipsize="end"
-				android:focusable="true"
-				android:focusableInTouchMode="true"
-				android:contentDescription="@string/navigation_title_desc" />
-	
-			<view
-				class="org.t2health.lib.widget.TextImageButton"
-				android:id="@+id/navigationRightButton"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="5dip"
-				android:contentDescription="@string/navigation_right_button_desc" />
-		</LinearLayout>
+		<FrameLayout
+			android:id="@+id/navigationContent"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1.0">
+		</FrameLayout>
 	</LinearLayout>
-
-	<FrameLayout
-		android:id="@+id/navigationContent"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_weight="1.0">
-	</FrameLayout>
-
-</LinearLayout>
+</view>

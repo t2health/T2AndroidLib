@@ -15,4 +15,10 @@
 			<flag name="bottom" value="3" />
 		</attr>
 	</declare-styleable>
+	
+	<declare-styleable name="T2Theme">
+	    <attr name="navigationHeaderTextAppearance" format="reference" />
+	    <attr name="navigationHeaderTextColor" format="color" />
+	    <attr name="navigationHeaderBgColor" format="color" />
+	</declare-styleable>
 </resources>

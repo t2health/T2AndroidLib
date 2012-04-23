@@ -3,10 +3,16 @@ package org.t2health.lib.activity;
 import org.t2health.lib.R;
 import org.t2health.lib.widget.TextImageButton;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.gesture.GestureOverlayView;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -70,6 +76,12 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 	public static final String EXTRA_LEFT_BUTTON_VISIBILITY = "leftButtonVisibility";
 	
 	/**
+	 * Specifies if navigation gestures are enabled.
+	 * Swipe left-to-right will invoke onLeftNavigationButtonPressed()
+	 */
+	public static final String EXTRA_GESTURES_ENABLED = "gesturesEnabled";
+	
+	/**
 	 * The result code that will be send when the left button is pressed and
 	 * its method is not overriden.
 	 */
@@ -78,12 +90,27 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 	private NavigationItemEventListener mNavItemEventListener;
 	private boolean mIsInitialized = false;
 
+	private boolean mIsGesturesEnabled = false;
+	private GestureDetector mGestureDetector;
+	private NavigationGestureOverlayListener mGestureOverlayListener;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
+		
+		mIsGesturesEnabled = this.getIntent().getBooleanExtra(EXTRA_GESTURES_ENABLED, mIsGesturesEnabled);
+		mGestureDetector = new GestureDetector(this, new NavigationGestureListener(this));
+		mGestureOverlayListener = new NavigationGestureOverlayListener(this);
 	}
 	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		
+		this.setIsGesturesEnabled(mIsGesturesEnabled);
+	}
+
 	private void initialize() {
 		if(mIsInitialized) {
 			return;
@@ -108,17 +135,13 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 		
 		// get and set component visibility
 		this.setLeftNavigationButtonVisibility(
-				intent.getIntExtra(
-						EXTRA_LEFT_BUTTON_VISIBILITY, 
-						//(this.getParent()==null)?View.GONE:View.VISIBLE
-						View.VISIBLE
-				)
+				intent.getIntExtra(EXTRA_LEFT_BUTTON_VISIBILITY, View.VISIBLE)
 		);
 		this.setRightNavigationButtonVisibility(
 				intent.getIntExtra(EXTRA_RIGHT_BUTTON_VISIBILITY, View.GONE)
 		);
 		this.setNavigationTitleBarVisibility(
-				intent.getIntExtra(EXTRA_RIGHT_BUTTON_VISIBILITY, View.VISIBLE)
+				intent.getIntExtra(EXTRA_TITLE_VISIBILITY, View.VISIBLE)
 		);
 		
 		// get and set component text
@@ -207,6 +230,27 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 	}
 	
 	/**
+	 * Returns true if the gestures will be recognized.
+	 * @return
+	 */
+	public boolean getIsGesturesEnabled() {
+		return this.mIsGesturesEnabled;
+	}
+	
+	/**
+	 * Set wether this activity should listen for navigation gestures.
+	 * @param b
+	 * @return
+	 */
+	public void setIsGesturesEnabled(boolean b) {
+		if(mIsGesturesEnabled) {
+			((GestureOverlayView)this.findViewById(R.id.navigationGestureOverlay)).addOnGestureListener(this.mGestureOverlayListener);
+		} else {
+			((GestureOverlayView)this.findViewById(R.id.navigationGestureOverlay)).removeOnGestureListener(this.mGestureOverlayListener);
+		}
+	}
+	
+	/**
 	 * Sets the base background color of the title bar.
 	 * @param color	the color to use.
 	 */
@@ -215,6 +259,17 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 			throw new RuntimeException(exceptionText);
 		}
 		this.findViewById(R.id.navigationTitleWrapper).setBackgroundColor(color);
+	}
+	
+	/**
+	 * Gets teh visibility of the left button.
+	 * @return a constant such as View.GONE, View.VISIBLE.. etc.
+	 */
+	protected int getLeftNavigationButtonVisibility() {
+		if(!mIsInitialized) {
+			throw new RuntimeException(exceptionText);
+		}
+		return this.findViewById(R.id.navigationLeftButton).getVisibility(); 
 	}
 	
 	/**
@@ -386,14 +441,83 @@ public abstract class BaseNavigationActivity extends BaseSecurityActivity {
 	private class NavigationItemEventListener implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
-			switch(arg0.getId()) {
-			case R.id.navigationLeftButton:
+			int viewId = arg0.getId();
+			if(viewId == R.id.navigationLeftButton) {
 				onLeftNavigationButtonPressed();
-				break;
-			case R.id.navigationRightButton:
+			} else if(viewId == R.id.navigationRightButton) {
 				onRightNavigationButtonPressed();
-				break;
 			}
+		}
+	}
+	 
+	private class NavigationGestureOverlayListener implements GestureOverlayView.OnGestureListener {
+	    public NavigationGestureOverlayListener(Context c) {
+	    	
+	    }
+
+		@Override
+		public void onGesture(GestureOverlayView overlay, MotionEvent event) {
+			mGestureDetector.onTouchEvent(event);
+		}
+
+		@Override
+		public void onGestureCancelled(GestureOverlayView overlay,
+				MotionEvent event) {
+		}
+
+		@Override
+		public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+			mGestureDetector.onTouchEvent(event);
+		}
+
+		@Override
+		public void onGestureStarted(GestureOverlayView overlay,
+				MotionEvent event) {
+			mGestureDetector.onTouchEvent(event);
+		}
+	}
+	
+	/**
+	 * Handles the navigation gestures.
+	 * @author robbiev
+	 *
+	 */
+	private class NavigationGestureListener extends SimpleOnGestureListener {
+	    private static final int SWIPE_MAX_OFF_PATH = 250;
+		private int swipeMinDistance;
+		private int swipeThresholdVelocity;
+		
+	    public NavigationGestureListener(Context c) {
+	    	ViewConfiguration vc = ViewConfiguration.get(c);
+	    	swipeMinDistance = vc.getScaledTouchSlop();
+	    	swipeThresholdVelocity = vc.getScaledMinimumFlingVelocity();
+	    }
+	    
+		@Override
+		public boolean onDown(MotionEvent e) {
+			return true;
+		}
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			try {
+				if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+					return false;
+				
+				// right to left swipe
+				if(e1.getX() - e2.getX() > swipeMinDistance*10 && Math.abs(velocityX) > swipeThresholdVelocity*10) {
+					return false;
+					
+				// left to right swipe
+				} else if (e2.getX() - e1.getX() > swipeMinDistance*10 && Math.abs(velocityX) > swipeThresholdVelocity*10) {
+					onLeftNavigationButtonPressed();
+					return false;
+				}
+			} catch (Exception e) {
+				// nothing
+			}
+			return false;
 		}
 	}
 }

@@ -90,16 +90,13 @@ public abstract class SimpleQAManagerActivity extends BaseQAManagerActivity impl
 	@Override
 	public void onClick(View v) {
 		Intent intent;
-		switch(v.getId()) {
-		case R.id.startButton:
+		int viewId = v.getId();
+		if(viewId == R.id.startButton) {
 			this.startQuestionare();
-			break;
-
-		case R.id.detailsButton:
+		} else if(viewId == R.id.detailsButton) {
 			intent = new Intent(this, WebViewActivity.class);
 			intent.putExtra(WebViewActivity.EXTRA_CONTENT, this.getQuestionare().content);
 			this.startActivity(intent);
-			break;
 		}
 	}
 }

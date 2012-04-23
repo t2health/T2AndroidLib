@@ -77,13 +77,12 @@ public class UnlockActivity extends BaseNavigationActivity implements OnKeyListe
 	}
 	
 	public void onClick(View v) {
-		switch(v.getId()){
-			case R.id.forgotPasswordButton:
-				this.startActivityForResult(
-						IntentFactory.Security.getForgotPasswordIntent(this), 
-						FORGOT_PIN_ACTIVITY
-				);
-				break;
+		int viewId = v.getId();
+		if(viewId == R.id.forgotPasswordButton) {
+			this.startActivityForResult(
+					IntentFactory.Security.getForgotPasswordIntent(this), 
+					FORGOT_PIN_ACTIVITY
+			);
 		}
 	}
 

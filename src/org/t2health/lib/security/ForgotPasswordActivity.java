@@ -57,10 +57,9 @@ public class ForgotPasswordActivity extends BaseNavigationActivity implements On
 	
 	@Override
 	public void onClick(View v) {
-		switch(v.getId()) {
-			case R.id.unlockButton:
-				checkForMatchedAnswers();
-				break;
+		int viewId = v.getId();
+		if(viewId == R.id.unlockButton) {
+			checkForMatchedAnswers();
 		}
 	}
 

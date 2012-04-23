@@ -373,13 +373,11 @@ private static final String exceptionText = "setContentView should be ran before
 	private class NavigationItemEventListener implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
-			switch(arg0.getId()) {
-			case R.id.navigationLeftButton:
+			int viewId = arg0.getId();
+			if(viewId == R.id.navigationLeftButton) {
 				onLeftNavigationButtonPressed();
-				break;
-			case R.id.navigationRightButton:
+			} else if(viewId == R.id.navigationRightButton) {
 				onRightNavigationButtonPressed();
-				break;
 			}
 		}
 	}

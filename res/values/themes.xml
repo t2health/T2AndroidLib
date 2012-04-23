@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="T2Theme" parent="@android:style/Theme">
+        <item name="navigationHeaderTextColor">?android:attr/colorForeground</item>
+        <item name="navigationHeaderBgColor">?android:attr/colorForegroundInverse</item>
+        <item name="navigationHeaderTextAppearance">@style/navigationHeaderTextAppearance</item>
+    </style>
+    
+    <style name="T2Theme.Light" parent="@android:style/Theme.Light">
+        <item name="navigationHeaderTextColor">?android:attr/colorForeground</item>
+        <item name="navigationHeaderBgColor">?android:attr/colorForegroundInverse</item>
+        <item name="navigationHeaderTextAppearance">@style/navigationHeaderTextAppearance</item>
+    </style>
+</resources>

@@ -23,6 +23,8 @@ import android.Manifest.permission;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -67,7 +69,13 @@ public class WebViewActivity extends BaseNavigationActivity {
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-		WebViewUtil.formatWebViewText(this, wv, contentString, Color.WHITE);
+		// get the text color from the current theme.
+		TypedArray atts = this.obtainStyledAttributes(new int[]{
+				android.R.attr.colorForeground,
+		});
+		int textColor = atts.getColor(0, Color.RED);
+		
+		WebViewUtil.formatWebViewText(this, wv, contentString, textColor);
 	}
 	
 	private void updateContentCahe(String url, long lastChangedTime) {
